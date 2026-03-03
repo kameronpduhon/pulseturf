@@ -1,0 +1,28 @@
+{
+    "id": "req_ghi789",
+    "status": "Success",
+    "data": [
+        {
+            "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+            "name": "Glow Aesthetics",
+            "full_address": "1234 Main St, Austin, TX 78701",
+            "phone": "+15125551234",
+            "site": "https://www.glowaesthetics.com",
+            "rating": 4.7,
+            "reviews": 134,
+            "subtypes": ["Med Spa", "Skin Care Clinic"],
+            "working_hours": {
+                "Monday": "9 AM - 6 PM",
+                "Tuesday": "9 AM - 6 PM",
+                "Wednesday": "9 AM - 6 PM",
+                "Thursday": "9 AM - 7 PM",
+                "Friday": "9 AM - 5 PM",
+                "Saturday": "10 AM - 3 PM",
+                "Sunday": "Closed"
+            },
+            "latitude": 30.2672,
+            "longitude": -97.7431,
+            "business_status": "OPERATIONAL"
+        }
+    ]
+}

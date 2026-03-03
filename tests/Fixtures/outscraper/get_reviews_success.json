@@ -1,0 +1,48 @@
+{
+    "id": "req_def456",
+    "status": "Success",
+    "data": [
+        {
+            "place_id": "ChIJN1t_tDeuEmsRUsoyG83frY4",
+            "name": "Glow Aesthetics",
+            "reviews_data": [
+                {
+                    "google_id": "ChdDSUhOTjF0X3REZXVFbXNSVXNveUc4M2ZyWTQ",
+                    "review_link": "https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sChdDSUhOTjF0",
+                    "autor_name": "Sarah Johnson",
+                    "autor_image": "https://lh3.googleusercontent.com/a/photo1.jpg",
+                    "review_rating": 5,
+                    "review_text": "Amazing experience! The Botox treatment was virtually painless and the results are so natural looking. Dr. Smith is incredibly skilled.",
+                    "review_datetime_utc": "2026-02-15 14:30:00",
+                    "owner_answer": null,
+                    "owner_answer_timestamp_datetime_utc": null,
+                    "review_likes": 3
+                },
+                {
+                    "google_id": "BhdCSUhPTjJ0X3RFZXVFbXNSVXNveUc5M2ZyWTU",
+                    "review_link": "https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sBhdCSUhP",
+                    "autor_name": "Michael Chen",
+                    "autor_image": "https://lh3.googleusercontent.com/a/photo2.jpg",
+                    "review_rating": 4,
+                    "review_text": "Great service overall. The hydrafacial was relaxing and my skin feels noticeably smoother. Only giving 4 stars because the wait time was a bit long.",
+                    "review_datetime_utc": "2026-02-10 09:15:00",
+                    "owner_answer": "Thank you for your feedback, Michael! We're glad you enjoyed the hydrafacial. We apologize for the wait and are working on improving our scheduling.",
+                    "owner_answer_timestamp_datetime_utc": "2026-02-11 11:00:00",
+                    "review_likes": 1
+                },
+                {
+                    "google_id": "AhdASUhNTjN0X3RGZXVFbXNSVXNveUg0M2ZyWTY",
+                    "review_link": "https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1sAhdASUhN",
+                    "autor_name": "Emily Rodriguez",
+                    "autor_image": null,
+                    "review_rating": 2,
+                    "review_text": "Disappointed with my lip filler results. They look uneven and I had to come back for a correction.",
+                    "review_datetime_utc": "2026-01-28 16:45:00",
+                    "owner_answer": null,
+                    "owner_answer_timestamp_datetime_utc": null,
+                    "review_likes": 0
+                }
+            ]
+        }
+    ]
+}
