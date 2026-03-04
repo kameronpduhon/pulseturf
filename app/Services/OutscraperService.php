@@ -32,11 +32,13 @@ class OutscraperService
 
         $results = $response['data'] ?? [];
 
-        if (empty($results) || empty($results[0])) {
+        // Outscraper search-v3 returns data[0][0] when async=false
+        $firstResult = $results[0] ?? [];
+        $business = isset($firstResult[0]) ? $firstResult[0] : $firstResult;
+
+        if (empty($business)) {
             throw OutscraperException::noResults($query);
         }
-
-        $business = $results[0];
 
         return [
             'place_id' => $business['place_id'] ?? null,
@@ -94,11 +96,12 @@ class OutscraperService
 
         $results = $response['data'] ?? [];
 
-        if (empty($results) || empty($results[0])) {
+        $firstResult = $results[0] ?? [];
+        $business = isset($firstResult[0]) ? $firstResult[0] : $firstResult;
+
+        if (empty($business)) {
             throw OutscraperException::noResults($placeId);
         }
-
-        $business = $results[0];
 
         return [
             'rating' => $business['rating'] ?? null,
