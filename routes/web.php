@@ -1,10 +1,16 @@
 <?php
 
+use App\Http\Controllers\DigestFeedbackController;
 use App\Livewire\SetupWizard;
 use Illuminate\Support\Facades\Route;
 
 // Public
 Route::view('/', 'welcome');
+
+// Signed feedback links (accessed from email, no auth required)
+Route::get('/digest/{digest}/feedback/{type}', DigestFeedbackController::class)
+    ->name('digest.feedback')
+    ->middleware('signed');
 
 // /dashboard redirect for any Breeze-generated links
 Route::redirect('/dashboard', '/home')->middleware(['auth', 'verified']);

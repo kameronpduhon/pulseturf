@@ -27,6 +27,7 @@ class Digest extends Model
         'sent_at',
         'opened_at',
         'clicked_at',
+        'feedback',
     ];
 
     protected function casts(): array
@@ -57,5 +58,15 @@ class Digest extends Model
     public function scopeDraft(Builder $query): Builder
     {
         return $query->where('status', 'draft');
+    }
+
+    public function scopeGenerated(Builder $query): Builder
+    {
+        return $query->where('status', 'generated');
+    }
+
+    public function scopeFailed(Builder $query): Builder
+    {
+        return $query->where('status', 'failed');
     }
 }

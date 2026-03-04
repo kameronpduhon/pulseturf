@@ -1,0 +1,21 @@
+{
+  "id": "chatcmpl-test123",
+  "object": "chat.completion",
+  "created": 1709500000,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\"subject_line\": \"Your Weekly Med Spa Intel: 4.8\u2605 Rating Holds Strong\", \"body\": \"<h2>Performance Snapshot</h2><p>Your business maintained a strong 4.8-star rating this week with 3 new reviews.</p><h2>Review Highlights</h2><p><strong>Standout Review:</strong> \\\"Amazing experience! The staff was incredibly professional.\\\" \u2014 Sarah M.</p><h2>Competitor Watch</h2><p>Competitor <strong>Glow Med Spa</strong> received 2 new reviews averaging 4.0 stars.</p><h2>Sentiment Trends</h2><p>Positive sentiment is up 5% compared to last week. No negative reviews received.</p><h2>Action Items</h2><ul><li>Consider responding to Sarah M.'s review to boost engagement</li><li>Monitor Glow Med Spa's pricing changes mentioned in their reviews</li></ul><h2>Week Ahead</h2><p>Focus on encouraging satisfied clients to leave reviews to maintain your competitive edge.</p>\"}"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 850,
+    "completion_tokens": 320,
+    "total_tokens": 1170
+  }
+}

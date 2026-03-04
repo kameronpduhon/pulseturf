@@ -50,4 +50,26 @@ class DigestFactory extends Factory
             'sent_at' => null,
         ]);
     }
+
+    public function generated(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status'          => 'generated',
+            'subject_line'    => 'Your Weekly Med Spa Intel: Rating Update',
+            'html_content'    => '<h2>Performance Snapshot</h2><p>Your business is doing great this week.</p>',
+            'llm_model'       => 'gpt-4o-mini',
+            'llm_prompt'      => 'Test prompt',
+            'llm_response'    => '{"subject_line": "test", "body": "test"}',
+            'llm_tokens_used' => 1000,
+            'llm_cost_cents'  => 5,
+        ]);
+    }
+
+    public function failed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status'       => 'failed',
+            'llm_model'    => 'gpt-4o-mini',
+        ]);
+    }
 }
