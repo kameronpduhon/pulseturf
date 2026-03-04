@@ -67,6 +67,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->trial_ends_at && $this->trial_ends_at->isFuture();
     }
 
+    public function isSubscribedOrTrial(): bool
+    {
+        return $this->isOnTrial() || $this->subscribed();
+    }
+
     public function hasActiveBusiness(): bool
     {
         return $this->business !== null && $this->business->status === 'active';
@@ -74,6 +79,19 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function competitorLimit(): int
     {
-        return $this->subscribed() ? 3 : 1;
+        $subscription = $this->subscription('default');
+
+        if (! $subscription) {
+            return 1;
+        }
+
+        $proMonthly = config('services.stripe.prices.pro_monthly');
+        $proAnnual = config('services.stripe.prices.pro_annual');
+
+        if ($subscription->stripe_price === $proMonthly || $subscription->stripe_price === $proAnnual) {
+            return 3;
+        }
+
+        return 1;
     }
 }

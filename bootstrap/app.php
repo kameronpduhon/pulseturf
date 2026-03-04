@@ -13,7 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'setup.complete' => \App\Http\Middleware\EnsureSetupComplete::class,
+            'subscribed' => \App\Http\Middleware\EnsureSubscribed::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: ['stripe/*']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

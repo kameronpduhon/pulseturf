@@ -33,6 +33,9 @@ new class extends Component
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                         {{ __('Home') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('billing')" :active="request()->routeIs('billing')" wire:navigate>
+                        {{ __('Billing') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -42,6 +45,12 @@ new class extends Component
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
+                            @if (auth()->user()->isOnTrial())
+                                @php $trialDaysLeft = (int) now()->diffInDays(auth()->user()->trial_ends_at, false); @endphp
+                                <span class="ms-2 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                                    Trial: {{ $trialDaysLeft }}d left
+                                </span>
+                            @endif
 
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -52,6 +61,10 @@ new class extends Component
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('billing')" wire:navigate>
+                            {{ __('Billing') }}
+                        </x-dropdown-link>
+
                         <x-dropdown-link :href="route('profile')" wire:navigate>
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -84,6 +97,9 @@ new class extends Component
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                 {{ __('Home') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('billing')" :active="request()->routeIs('billing')" wire:navigate>
+                {{ __('Billing') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -91,9 +107,19 @@ new class extends Component
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800" x-data="{{ json_encode(['name' => auth()->user()->name]) }}" x-text="name" x-on:profile-updated.window="name = $event.detail.name"></div>
                 <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                @if (auth()->user()->isOnTrial())
+                    @php $trialDaysLeft = (int) now()->diffInDays(auth()->user()->trial_ends_at, false); @endphp
+                    <span class="mt-1 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                        Trial: {{ $trialDaysLeft }}d left
+                    </span>
+                @endif
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('billing')" wire:navigate>
+                    {{ __('Billing') }}
+                </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('profile')" wire:navigate>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
