@@ -24,6 +24,6 @@ class SubscriptionCancelledNotification extends Notification implements ShouldQu
             ->line('Your PulseTurf subscription has been cancelled.')
             ->line('You will continue to have full access until the end of your current billing period.')
             ->line('Your data — including your business profile, competitor list, and review history — will be preserved if you decide to come back.')
-            ->action('Resubscribe', route('billing'));
+            ->action('Resubscribe', route('settings', ['tab' => 'billing']));
     }
 }

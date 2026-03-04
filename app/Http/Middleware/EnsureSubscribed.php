@@ -13,7 +13,7 @@ class EnsureSubscribed
         $user = $request->user();
 
         if (! $user?->isOnTrial() && ! $user?->subscribed()) {
-            return redirect()->route('billing');
+            return redirect()->route('settings', ['tab' => 'billing']);
         }
 
         return $next($request);

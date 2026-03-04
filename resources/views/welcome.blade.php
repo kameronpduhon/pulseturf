@@ -1,145 +1,582 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PulseTurf — Competitive Intelligence for Med Spas</title>
+    <meta name="description" content="Know what your competitors are doing before your next patient visit. PulseTurf delivers weekly AI-powered briefings on your med spa's competitive landscape.">
 
-        <title>Laravel</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-        <!-- Styles -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="antialiased font-sans">
-        <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-            <img id="background" class="absolute -left-20 top-0 max-w-[877px]" src="https://laravel.com/assets/img/welcome/background.svg" />
-            <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-                <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
-                    <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
-                        <div class="flex lg:justify-center lg:col-start-2">
-                            <svg class="h-12 w-auto text-white lg:h-16 lg:text-[#FF2D20]" viewBox="0 0 62 65" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M61.8548 14.6253C61.8778 14.7102 61.8895 14.7978 61.8897 14.8858V28.5615C61.8898 28.737 61.8434 28.9095 61.7554 29.0614C61.6675 29.2132 61.5409 29.3392 61.3887 29.4265L49.9104 36.0351V49.1337C49.9104 49.4902 49.7209 49.8192 49.4118 49.9987L25.4519 63.7916C25.3971 63.8227 25.3372 63.8427 25.2774 63.8639C25.255 63.8714 25.2338 63.8851 25.2101 63.8913C25.0426 63.9354 24.8666 63.9354 24.6991 63.8913C24.6716 63.8838 24.6467 63.8689 24.6205 63.8589C24.5657 63.8389 24.5084 63.8215 24.456 63.7916L0.501061 49.9987C0.348882 49.9113 0.222437 49.7853 0.134469 49.6334C0.0465019 49.4816 0.000120578 49.3092 0 49.1337L0 8.10652C0 8.01678 0.0124642 7.92953 0.0348998 7.84477C0.0423783 7.8161 0.0598282 7.78993 0.0697995 7.76126C0.0884958 7.70891 0.105946 7.65531 0.133367 7.6067C0.152063 7.5743 0.179485 7.54812 0.20192 7.51821C0.230588 7.47832 0.256763 7.43719 0.290416 7.40229C0.319084 7.37362 0.356476 7.35243 0.388883 7.32751C0.425029 7.29759 0.457436 7.26518 0.498568 7.2415L12.4779 0.345059C12.6296 0.257786 12.8015 0.211853 12.9765 0.211853C13.1515 0.211853 13.3234 0.257786 13.475 0.345059L25.4531 7.2415H25.4556C25.4955 7.26643 25.5292 7.29759 25.5653 7.32626C25.5977 7.35119 25.6339 7.37362 25.6625 7.40104C25.6974 7.43719 25.7224 7.47832 25.7523 7.51821C25.7735 7.54812 25.8021 7.5743 25.8196 7.6067C25.8483 7.65656 25.8645 7.70891 25.8844 7.76126C25.8944 7.78993 25.9118 7.8161 25.9193 7.84602C25.9423 7.93096 25.954 8.01853 25.9542 8.10652V33.7317L35.9355 27.9844V14.8846C35.9355 14.7973 35.948 14.7088 35.9704 14.6253C35.9792 14.5954 35.9954 14.5692 36.0053 14.5405C36.0253 14.4882 36.0427 14.4346 36.0702 14.386C36.0888 14.3536 36.1163 14.3274 36.1375 14.2975C36.1674 14.2576 36.1923 14.2165 36.2272 14.1816C36.2559 14.1529 36.292 14.1317 36.3244 14.1068C36.3618 14.0769 36.3942 14.0445 36.4341 14.0208L48.4147 7.12434C48.5663 7.03694 48.7383 6.99094 48.9133 6.99094C49.0883 6.99094 49.2602 7.03694 49.4118 7.12434L61.3899 14.0208C61.4323 14.0457 61.4647 14.0769 61.5021 14.1055C61.5333 14.1305 61.5694 14.1529 61.5981 14.1803C61.633 14.2165 61.6579 14.2576 61.6878 14.2975C61.7103 14.3274 61.7377 14.3536 61.7551 14.386C61.7838 14.4346 61.8 14.4882 61.8199 14.5405C61.8312 14.5692 61.8474 14.5954 61.8548 14.6253ZM59.893 27.9844V16.6121L55.7013 19.0252L49.9104 22.3593V33.7317L59.8942 27.9844H59.893ZM47.9149 48.5566V37.1768L42.2187 40.4299L25.953 49.7133V61.2003L47.9149 48.5566ZM1.99677 9.83281V48.5566L23.9562 61.199V49.7145L12.4841 43.2219L12.4804 43.2194L12.4754 43.2169C12.4368 43.1945 12.4044 43.1621 12.3682 43.1347C12.3371 43.1097 12.3009 43.0898 12.2735 43.0624L12.271 43.0586C12.2386 43.0275 12.2162 42.9888 12.1887 42.9539C12.1638 42.9203 12.1339 42.8916 12.114 42.8567L12.1127 42.853C12.0903 42.8156 12.0766 42.7707 12.0604 42.7283C12.0442 42.6909 12.023 42.656 12.013 42.6161C12.0005 42.5688 11.998 42.5177 11.9931 42.4691C11.9881 42.4317 11.9781 42.3943 11.9781 42.3569V15.5801L6.18848 12.2446L1.99677 9.83281ZM12.9777 2.36177L2.99764 8.10652L12.9752 13.8513L22.9541 8.10527L12.9752 2.36177H12.9777ZM18.1678 38.2138L23.9574 34.8809V9.83281L19.7657 12.2459L13.9749 15.5801V40.6281L18.1678 38.2138ZM48.9133 9.14105L38.9344 14.8858L48.9133 20.6305L58.8909 14.8846L48.9133 9.14105ZM47.9149 22.3593L42.124 19.0252L37.9323 16.6121V27.9844L43.7219 31.3174L47.9149 33.7317V22.3593ZM24.9533 47.987L39.59 39.631L46.9065 35.4555L36.9352 29.7145L25.4544 36.3242L14.9907 42.3482L24.9533 47.987Z" fill="currentColor"/></svg>
-                        </div>
-                        @if (Route::has('login'))
-                            <livewire:welcome.navigation />
-                        @endif
-                    </header>
+    <style>
+        .font-serif-display {
+            font-family: 'DM Serif Display', Georgia, serif;
+        }
 
-                    <main class="mt-6">
-                        <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                            <a
-                                href="https://laravel.com/docs"
-                                id="docs-card"
-                                class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                            >
-                                <div id="screenshot-container" class="relative flex w-full flex-1 items-stretch">
-                                    <img
-                                        src="https://laravel.com/assets/img/welcome/docs-light.svg"
-                                        alt="Laravel documentation screenshot"
-                                        class="aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.06)] dark:hidden"
-                                        onerror="
-                                            document.getElementById('screenshot-container').classList.add('!hidden');
-                                            document.getElementById('docs-card').classList.add('!row-span-1');
-                                            document.getElementById('docs-card-content').classList.add('!flex-row');
-                                            document.getElementById('background').classList.add('!hidden');
-                                        "
-                                    />
-                                    <img
-                                        src="https://laravel.com/assets/img/welcome/docs-dark.svg"
-                                        alt="Laravel documentation screenshot"
-                                        class="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-top object-cover drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block"
-                                    />
-                                    <div
-                                        class="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"
-                                    ></div>
-                                </div>
+        /* Hero mesh gradient background */
+        .hero-bg {
+            background-color: #ffffff;
+            background-image:
+                radial-gradient(at 20% 20%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+                radial-gradient(at 80% 10%, rgba(79, 70, 229, 0.06) 0px, transparent 50%),
+                radial-gradient(at 60% 80%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+        }
 
-                                <div class="relative flex items-center gap-6 lg:items-end">
-                                    <div id="docs-card-content" class="flex items-start gap-6 lg:flex-col">
-                                        <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                            <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><path fill="#FF2D20" d="M23 4a1 1 0 0 0-1.447-.894L12.224 7.77a.5.5 0 0 1-.448 0L2.447 3.106A1 1 0 0 0 1 4v13.382a1.99 1.99 0 0 0 1.105 1.79l9.448 4.728c.14.065.293.1.447.1.154-.005.306-.04.447-.105l9.453-4.724a1.99 1.99 0 0 0 1.1-1.789V4ZM3 6.023a.25.25 0 0 1 .362-.223l7.5 3.75a.251.251 0 0 1 .138.223v11.2a.25.25 0 0 1-.362.224l-7.5-3.75a.25.25 0 0 1-.138-.22V6.023Zm18 11.2a.25.25 0 0 1-.138.224l-7.5 3.75a.249.249 0 0 1-.329-.099.249.249 0 0 1-.033-.12V9.772a.251.251 0 0 1 .138-.224l7.5-3.75a.25.25 0 0 1 .362.224v11.2Z"/><path fill="#FF2D20" d="m3.55 1.893 8 4.048a1.008 1.008 0 0 0 .9 0l8-4.048a1 1 0 0 0-.9-1.785l-7.322 3.706a.506.506 0 0 1-.452 0L4.454.108a1 1 0 0 0-.9 1.785H3.55Z"/></svg>
-                                        </div>
+        /* Subtle dot pattern */
+        .dot-pattern {
+            background-image: radial-gradient(circle, rgba(79, 70, 229, 0.12) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
 
-                                        <div class="pt-3 sm:pt-5 lg:pt-0">
-                                            <h2 class="text-xl font-semibold text-black dark:text-white">Documentation</h2>
+        /* Nav blur */
+        .nav-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background-color: rgba(255, 255, 255, 0.88);
+        }
 
-                                            <p class="mt-4 text-sm/relaxed">
-                                                Laravel has wonderful documentation covering every aspect of the framework. Whether you are a newcomer or have prior experience with Laravel, we recommend reading our documentation from beginning to end.
-                                            </p>
-                                        </div>
-                                    </div>
+        /* Step badge gradient */
+        .step-badge {
+            background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+        }
 
-                                    <svg class="size-6 shrink-0 stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
-                                </div>
-                            </a>
+        /* Card hover lift */
+        .card-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px -12px rgba(79, 70, 229, 0.15);
+        }
 
-                            <a
-                                href="https://laracasts.com"
-                                class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                            >
-                                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g fill="#FF2D20"><path d="M24 8.25a.5.5 0 0 0-.5-.5H.5a.5.5 0 0 0-.5.5v12a2.5 2.5 0 0 0 2.5 2.5h19a2.5 2.5 0 0 0 2.5-2.5v-12Zm-7.765 5.868a1.221 1.221 0 0 1 0 2.264l-6.626 2.776A1.153 1.153 0 0 1 8 18.123v-5.746a1.151 1.151 0 0 1 1.609-1.035l6.626 2.776ZM19.564 1.677a.25.25 0 0 0-.177-.427H15.6a.106.106 0 0 0-.072.03l-4.54 4.543a.25.25 0 0 0 .177.427h3.783c.027 0 .054-.01.073-.03l4.543-4.543ZM22.071 1.318a.047.047 0 0 0-.045.013l-4.492 4.492a.249.249 0 0 0 .038.385.25.25 0 0 0 .14.042h5.784a.5.5 0 0 0 .5-.5v-2a2.5 2.5 0 0 0-1.925-2.432ZM13.014 1.677a.25.25 0 0 0-.178-.427H9.101a.106.106 0 0 0-.073.03l-4.54 4.543a.25.25 0 0 0 .177.427H8.4a.106.106 0 0 0 .073-.03l4.54-4.543ZM6.513 1.677a.25.25 0 0 0-.177-.427H2.5A2.5 2.5 0 0 0 0 3.75v2a.5.5 0 0 0 .5.5h1.4a.106.106 0 0 0 .073-.03l4.54-4.543Z"/></g></svg>
-                                </div>
+        /* Alpine cloak */
+        [x-cloak] { display: none !important; }
 
-                                <div class="pt-3 sm:pt-5">
-                                    <h2 class="text-xl font-semibold text-black dark:text-white">Laracasts</h2>
+        /* FAQ accordion via CSS grid trick */
+        .faq-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .faq-content.open {
+            grid-template-rows: 1fr;
+        }
+        .faq-inner {
+            overflow: hidden;
+        }
 
-                                    <p class="mt-4 text-sm/relaxed">
-                                        Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                    </p>
-                                </div>
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-                                <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
-                            </a>
+        /* Hero entrance animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up            { animation: fadeUp 0.7s ease both; }
+        .fade-up-delay-1    { animation-delay: 0.1s; }
+        .fade-up-delay-2    { animation-delay: 0.2s; }
+        .fade-up-delay-3    { animation-delay: 0.3s; }
+        .fade-up-delay-4    { animation-delay: 0.4s; }
 
-                            <a
-                                href="https://laravel-news.com"
-                                class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                            >
-                                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><g fill="#FF2D20"><path d="M8.75 4.5H5.5c-.69 0-1.25.56-1.25 1.25v4.75c0 .69.56 1.25 1.25 1.25h3.25c.69 0 1.25-.56 1.25-1.25V5.75c0-.69-.56-1.25-1.25-1.25Z"/><path d="M24 10a3 3 0 0 0-3-3h-2V2.5a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2V20a3.5 3.5 0 0 0 3.5 3.5h17A3.5 3.5 0 0 0 24 20V10ZM3.5 21.5A1.5 1.5 0 0 1 2 20V3a.5.5 0 0 1 .5-.5h14a.5.5 0 0 1 .5.5v17c0 .295.037.588.11.874a.5.5 0 0 1-.484.625L3.5 21.5ZM22 20a1.5 1.5 0 1 1-3 0V9.5a.5.5 0 0 1 .5-.5H21a1 1 0 0 1 1 1v10Z"/><path d="M12.751 6.047h2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-2A.75.75 0 0 1 12 7.3v-.5a.75.75 0 0 1 .751-.753ZM12.751 10.047h2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-2A.75.75 0 0 1 12 11.3v-.5a.75.75 0 0 1 .751-.753ZM4.751 14.047h10a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-10A.75.75 0 0 1 4 15.3v-.5a.75.75 0 0 1 .751-.753ZM4.75 18.047h7.5a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-.75.75h-7.5A.75.75 0 0 1 4 19.3v-.5a.75.75 0 0 1 .75-.753Z"/></g></svg>
-                                </div>
+        /* Pro card subtle pulse */
+        @keyframes soft-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.3); }
+            50%       { box-shadow: 0 0 0 6px rgba(79, 70, 229, 0); }
+        }
+        .popular-pulse {
+            animation: soft-pulse 3s ease-in-out infinite;
+        }
 
-                                <div class="pt-3 sm:pt-5">
-                                    <h2 class="text-xl font-semibold text-black dark:text-white">Laravel News</h2>
+        /* Scroll-triggered reveal */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased font-sans bg-white text-gray-900" x-cloak>
 
-                                    <p class="mt-4 text-sm/relaxed">
-                                        Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                    </p>
-                                </div>
+    <!-- ════════════════════════════════════════════════
+         STICKY NAV
+    ════════════════════════════════════════════════ -->
+    <nav class="nav-blur fixed top-0 left-0 right-0 z-50 border-b border-gray-100/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
 
-                                <svg class="size-6 shrink-0 self-center stroke-[#FF2D20]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"/></svg>
-                            </a>
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-2">
+                    <div class="w-7 h-7 rounded-md step-badge flex items-center justify-center flex-shrink-0">
+                        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <span class="text-xl font-bold text-indigo-600 tracking-tight">PulseTurf</span>
+                </a>
 
-                            <div class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800">
-                                <div class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16">
-                                    <svg class="size-5 sm:size-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <g fill="#FF2D20">
-                                            <path
-                                                d="M16.597 12.635a.247.247 0 0 0-.08-.237 2.234 2.234 0 0 1-.769-1.68c.001-.195.03-.39.084-.578a.25.25 0 0 0-.09-.267 8.8 8.8 0 0 0-4.826-1.66.25.25 0 0 0-.268.181 2.5 2.5 0 0 1-2.4 1.824.045.045 0 0 0-.045.037 12.255 12.255 0 0 0-.093 3.86.251.251 0 0 0 .208.214c2.22.366 4.367 1.08 6.362 2.118a.252.252 0 0 0 .32-.079 10.09 10.09 0 0 0 1.597-3.733ZM13.616 17.968a.25.25 0 0 0-.063-.407A19.697 19.697 0 0 0 8.91 15.98a.25.25 0 0 0-.287.325c.151.455.334.898.548 1.328.437.827.981 1.594 1.619 2.28a.249.249 0 0 0 .32.044 29.13 29.13 0 0 0 2.506-1.99ZM6.303 14.105a.25.25 0 0 0 .265-.274 13.048 13.048 0 0 1 .205-4.045.062.062 0 0 0-.022-.07 2.5 2.5 0 0 1-.777-.982.25.25 0 0 0-.271-.149 11 11 0 0 0-5.6 2.815.255.255 0 0 0-.075.163c-.008.135-.02.27-.02.406.002.8.084 1.598.246 2.381a.25.25 0 0 0 .303.193 19.924 19.924 0 0 1 5.746-.438ZM9.228 20.914a.25.25 0 0 0 .1-.393 11.53 11.53 0 0 1-1.5-2.22 12.238 12.238 0 0 1-.91-2.465.248.248 0 0 0-.22-.187 18.876 18.876 0 0 0-5.69.33.249.249 0 0 0-.179.336c.838 2.142 2.272 4 4.132 5.353a.254.254 0 0 0 .15.048c1.41-.01 2.807-.282 4.117-.802ZM18.93 12.957l-.005-.008a.25.25 0 0 0-.268-.082 2.21 2.21 0 0 1-.41.081.25.25 0 0 0-.217.2c-.582 2.66-2.127 5.35-5.75 7.843a.248.248 0 0 0-.09.299.25.25 0 0 0 .065.091 28.703 28.703 0 0 0 2.662 2.12.246.246 0 0 0 .209.037c2.579-.701 4.85-2.242 6.456-4.378a.25.25 0 0 0 .048-.189 13.51 13.51 0 0 0-2.7-6.014ZM5.702 7.058a.254.254 0 0 0 .2-.165A2.488 2.488 0 0 1 7.98 5.245a.093.093 0 0 0 .078-.062 19.734 19.734 0 0 1 3.055-4.74.25.25 0 0 0-.21-.41 12.009 12.009 0 0 0-10.4 8.558.25.25 0 0 0 .373.281 12.912 12.912 0 0 1 4.826-1.814ZM10.773 22.052a.25.25 0 0 0-.28-.046c-.758.356-1.55.635-2.365.833a.25.25 0 0 0-.022.48c1.252.43 2.568.65 3.893.65.1 0 .2 0 .3-.008a.25.25 0 0 0 .147-.444c-.526-.424-1.1-.917-1.673-1.465ZM18.744 8.436a.249.249 0 0 0 .15.228 2.246 2.246 0 0 1 1.352 2.054c0 .337-.08.67-.23.972a.25.25 0 0 0 .042.28l.007.009a15.016 15.016 0 0 1 2.52 4.6.25.25 0 0 0 .37.132.25.25 0 0 0 .096-.114c.623-1.464.944-3.039.945-4.63a12.005 12.005 0 0 0-5.78-10.258.25.25 0 0 0-.373.274c.547 2.109.85 4.274.901 6.453ZM9.61 5.38a.25.25 0 0 0 .08.31c.34.24.616.561.8.935a.25.25 0 0 0 .3.127.631.631 0 0 1 .206-.034c2.054.078 4.036.772 5.69 1.991a.251.251 0 0 0 .267.024c.046-.024.093-.047.141-.067a.25.25 0 0 0 .151-.23A29.98 29.98 0 0 0 15.957.764a.25.25 0 0 0-.16-.164 11.924 11.924 0 0 0-2.21-.518.252.252 0 0 0-.215.076A22.456 22.456 0 0 0 9.61 5.38Z"
-                                            />
-                                        </g>
-                                    </svg>
-                                </div>
-
-                                <div class="pt-3 sm:pt-5">
-                                    <h2 class="text-xl font-semibold text-black dark:text-white">Vibrant Ecosystem</h2>
-
-                                    <p class="mt-4 text-sm/relaxed">
-                                        Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white dark:focus-visible:ring-[#FF2D20]">Forge</a>, <a href="https://vapor.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Vapor</a>, <a href="https://nova.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Nova</a>, <a href="https://envoyer.io" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Envoyer</a>, and <a href="https://herd.laravel.com" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Herd</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Echo</a>, <a href="https://laravel.com/docs/horizon" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white">Telescope</a>, and more.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </main>
-
-                    <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-                    </footer>
+                <!-- Nav actions -->
+                <div class="flex items-center gap-2 sm:gap-4">
+                    @auth
+                        <a href="{{ route('home') }}"
+                           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors">
+                            Dashboard
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}"
+                           class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors px-3 py-2">
+                            Log in
+                        </a>
+                        <a href="{{ route('register') }}"
+                           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-sm">
+                            Start Free Trial
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
-    </body>
+    </nav>
+
+    <!-- ════════════════════════════════════════════════
+         HERO
+    ════════════════════════════════════════════════ -->
+    <section class="hero-bg relative pt-28 pb-24 sm:pt-36 sm:pb-32 overflow-hidden">
+
+        <!-- Dot pattern overlay -->
+        <div class="dot-pattern absolute inset-0 opacity-40 pointer-events-none"></div>
+
+        <!-- Ambient glow blobs -->
+        <div class="absolute -right-24 top-0 w-96 h-96 rounded-full bg-indigo-50 opacity-70 blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 bottom-0 w-72 h-72 rounded-full bg-indigo-50 opacity-50 blur-3xl pointer-events-none"></div>
+
+        <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+            <!-- Eyebrow -->
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-sm font-semibold mb-8 fade-up">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                AI-powered &middot; Weekly briefings &middot; No setup hassle
+            </div>
+
+            <!-- Headline -->
+            <h1 class="font-serif-display text-4xl sm:text-6xl lg:text-7xl text-gray-900 leading-[1.1] tracking-tight mb-6 fade-up fade-up-delay-1">
+                Competitive Intelligence<br>
+                <em class="gradient-text not-italic">for Med Spas</em>
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-lg sm:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed fade-up fade-up-delay-2">
+                Every Monday morning, receive an AI-crafted briefing on your competitors' Google reviews, ratings, and patient sentiment — so you always know where you stand.
+            </p>
+
+            <!-- CTA group -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-up fade-up-delay-3">
+                @auth
+                    <a href="{{ route('home') }}"
+                       class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-600 text-white text-base font-semibold hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 w-full sm:w-auto justify-center">
+                        Go to Dashboard
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
+                @else
+                    <a href="{{ route('register') }}"
+                       class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-indigo-600 text-white text-base font-semibold hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-lg shadow-indigo-200 w-full sm:w-auto justify-center">
+                        Start Your Free Trial
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
+                    <p class="text-sm text-gray-400 font-medium">14-day free trial &mdash; no credit card required</p>
+                @endauth
+            </div>
+
+            <!-- Feature strip -->
+            <div class="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 fade-up fade-up-delay-4">
+                @foreach ([
+                    'Monitor Google Reviews',
+                    'Track Star Ratings',
+                    'AI-Powered Analysis',
+                    'Weekly Email Digests',
+                ] as $feature)
+                    <div class="flex items-center gap-2 text-gray-500 text-sm">
+                        <svg class="w-4 h-4 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+                        </svg>
+                        {{ $feature }}
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         HOW IT WORKS
+    ════════════════════════════════════════════════ -->
+    <section class="py-20 sm:py-28 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center mb-14 scroll-reveal">
+                <p class="text-indigo-600 text-sm font-semibold uppercase tracking-widest mb-3">Simple Setup</p>
+                <h2 class="font-serif-display text-3xl sm:text-5xl text-gray-900 leading-tight">
+                    Up and running in minutes
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+
+                <!-- Connecting line desktop only -->
+                <div class="hidden md:block absolute top-10 left-[calc(16.66%+1.5rem)] right-[calc(16.66%+1.5rem)] h-px bg-gradient-to-r from-indigo-200 via-indigo-300 to-indigo-200 z-0"></div>
+
+                <!-- Step 1 -->
+                <div class="relative bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-lift scroll-reveal" style="transition-delay: 0.1s;">
+                    <div class="step-badge w-12 h-12 rounded-xl flex items-center justify-center mb-6 text-white text-lg font-bold shadow-md shadow-indigo-200">1</div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Add your med spa</h3>
+                    <p class="text-gray-500 leading-relaxed">
+                        Search for your business by name and location. We pull your Google Business profile automatically — no manual entry needed.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-indigo-600 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                        Google Business integration
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-lift scroll-reveal" style="transition-delay: 0.2s;">
+                    <div class="step-badge w-12 h-12 rounded-xl flex items-center justify-center mb-6 text-white text-lg font-bold shadow-md shadow-indigo-200">2</div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Pick your competitors</h3>
+                    <p class="text-gray-500 leading-relaxed">
+                        Select the med spas you want to track. We begin monitoring their reviews, ratings, and patient feedback in real time.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-indigo-600 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                        </svg>
+                        Track up to 3 competitors
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative bg-white rounded-2xl p-8 shadow-sm border border-gray-100 card-lift scroll-reveal" style="transition-delay: 0.3s;">
+                    <div class="step-badge w-12 h-12 rounded-xl flex items-center justify-center mb-6 text-white text-lg font-bold shadow-md shadow-indigo-200">3</div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Get weekly AI briefings</h3>
+                    <p class="text-gray-500 leading-relaxed">
+                        Every Monday morning, receive a clear, actionable summary of the competitive landscape — written by AI, delivered to your inbox.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-indigo-600 text-sm font-medium">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                        </svg>
+                        Delivered every Monday
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         PRICING
+    ════════════════════════════════════════════════ -->
+    <section class="py-20 sm:py-28 bg-white" x-data="{ annual: false }">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center mb-12 scroll-reveal">
+                <p class="text-indigo-600 text-sm font-semibold uppercase tracking-widest mb-3">Pricing</p>
+                <h2 class="font-serif-display text-3xl sm:text-5xl text-gray-900 leading-tight mb-4">
+                    Simple, transparent pricing
+                </h2>
+                <p class="text-gray-500 text-lg max-w-xl mx-auto mb-8">
+                    Start with a 14-day free trial. No credit card required.
+                </p>
+
+                <!-- Billing toggle -->
+                <div class="inline-flex items-center bg-gray-100 rounded-full p-1.5">
+                    <button
+                        @click="annual = false"
+                        :class="!annual ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'"
+                        class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200">
+                        Monthly
+                    </button>
+                    <button
+                        @click="annual = true"
+                        :class="annual ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'"
+                        class="px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 flex items-center gap-2">
+                        Annual
+                        <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full">Save 17%</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
+                <!-- Starter -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-200 card-lift scroll-reveal">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Starter</h3>
+                        <p class="text-gray-500 text-sm">Perfect for solo practitioners</p>
+                    </div>
+                    <div class="mb-8">
+                        <div x-show="!annual" x-cloak class="flex items-end gap-1">
+                            <span class="font-serif-display text-5xl text-gray-900">$29</span>
+                            <span class="text-gray-400 mb-2">/month</span>
+                        </div>
+                        <div x-show="annual" x-cloak class="flex items-end gap-1">
+                            <span class="font-serif-display text-5xl text-gray-900">$290</span>
+                            <span class="text-gray-400 mb-2">/year</span>
+                        </div>
+                        <p x-show="annual" x-cloak class="text-sm text-indigo-600 font-medium mt-1">That's $24.17/month — save $58</p>
+                        <p x-show="!annual" x-cloak class="text-sm text-gray-400 mt-1">&nbsp;</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-3 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            <strong class="text-gray-900">1 competitor</strong> tracked
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            Weekly AI briefings
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            Review monitoring
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            Email delivery
+                        </li>
+                    </ul>
+                    <a href="{{ route('register') }}"
+                       class="block w-full text-center px-6 py-3 rounded-xl border-2 border-indigo-600 text-indigo-600 text-sm font-semibold hover:bg-indigo-50 transition-colors">
+                        Start Free Trial
+                    </a>
+                </div>
+
+                <!-- Pro -->
+                <div class="bg-indigo-600 rounded-2xl p-8 border border-indigo-500 card-lift popular-pulse scroll-reveal relative overflow-hidden" style="transition-delay: 0.1s;">
+
+                    <!-- Decorative circles -->
+                    <div class="absolute top-0 right-0 w-40 h-40 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+                    <!-- Badge -->
+                    <div class="absolute top-6 right-6">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold tracking-wide uppercase">
+                            Most Popular
+                        </span>
+                    </div>
+
+                    <div class="mb-6 relative">
+                        <h3 class="text-lg font-bold text-white mb-1">Pro</h3>
+                        <p class="text-indigo-200 text-sm">For growing practices</p>
+                    </div>
+                    <div class="mb-8 relative">
+                        <div x-show="!annual" x-cloak class="flex items-end gap-1">
+                            <span class="font-serif-display text-5xl text-white">$79</span>
+                            <span class="text-indigo-200 mb-2">/month</span>
+                        </div>
+                        <div x-show="annual" x-cloak class="flex items-end gap-1">
+                            <span class="font-serif-display text-5xl text-white">$790</span>
+                            <span class="text-indigo-200 mb-2">/year</span>
+                        </div>
+                        <p x-show="annual" x-cloak class="text-sm text-indigo-200 mt-1">That's $65.83/month — save $158</p>
+                        <p x-show="!annual" x-cloak class="text-sm text-indigo-200 mt-1">&nbsp;</p>
+                    </div>
+                    <ul class="space-y-3 mb-8 relative">
+                        <li class="flex items-center gap-3 text-sm text-indigo-100">
+                            <svg class="w-4 h-4 text-indigo-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            <strong class="text-white">3 competitors</strong> tracked
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-indigo-100">
+                            <svg class="w-4 h-4 text-indigo-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            Weekly AI briefings
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-indigo-100">
+                            <svg class="w-4 h-4 text-indigo-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            Review monitoring
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-indigo-100">
+                            <svg class="w-4 h-4 text-indigo-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            Email delivery
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-indigo-100">
+                            <svg class="w-4 h-4 text-indigo-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                            <strong class="text-white">Priority support</strong>
+                        </li>
+                    </ul>
+                    <a href="{{ route('register') }}"
+                       class="relative block w-full text-center px-6 py-3 rounded-xl bg-white text-indigo-600 text-sm font-bold hover:bg-indigo-50 transition-colors shadow-sm">
+                        Start Free Trial
+                    </a>
+                </div>
+
+            </div>
+
+            <p class="text-center text-sm text-gray-400 mt-8 scroll-reveal">
+                Cancel anytime. No contracts, no setup fees.
+            </p>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         FAQ
+    ════════════════════════════════════════════════ -->
+    <section class="py-20 sm:py-28 bg-gray-50 border-t border-gray-100"
+             x-data="{ open: null }">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center mb-14 scroll-reveal">
+                <p class="text-indigo-600 text-sm font-semibold uppercase tracking-widest mb-3">FAQ</p>
+                <h2 class="font-serif-display text-3xl sm:text-5xl text-gray-900 leading-tight">
+                    Common questions
+                </h2>
+            </div>
+
+            <div class="space-y-3">
+
+                @php
+                $faqs = [
+                    [1, 'What data does PulseTurf track?',
+                        'PulseTurf monitors Google Business profiles for your med spa and each competitor you add. We track Google review counts, star ratings, new review text, and response activity — giving you a clear picture of how patient sentiment is shifting week over week.'],
+                    [2, 'How often do I receive briefings?',
+                        "You receive one briefing every Monday morning. Each digest is generated fresh using the past week's review data, giving you an up-to-date snapshot of your competitive landscape to start the week well-informed."],
+                    [3, 'Can I cancel anytime?',
+                        "Yes, absolutely. There are no contracts, no cancellation fees, and no lock-in periods. You can cancel your subscription at any time from your billing settings. You'll retain access through the end of your billing period."],
+                    [4, 'What happens during the free trial?',
+                        'Your 14-day free trial gives you full access to every feature — no credit card required to start. You can set up your business, add a competitor, and receive real weekly briefings. If you choose not to subscribe, your account simply expires at the end of the trial with no charges.'],
+                    [5, 'How many competitors can I track?',
+                        'The Starter plan lets you track 1 competitor, which is ideal for practices focused on their primary rival. The Pro plan expands that to 3 competitors — perfect if you operate in a competitive market with multiple nearby med spas to keep an eye on.'],
+                ];
+                @endphp
+
+                @foreach ($faqs as [$id, $question, $answer])
+                    <div class="bg-white rounded-2xl border border-gray-100 overflow-hidden scroll-reveal" style="transition-delay: {{ ($id - 1) * 0.05 }}s;">
+                        <button
+                            @click="open = open === {{ $id }} ? null : {{ $id }}"
+                            class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-indigo-500">
+                            <span class="font-semibold text-gray-900 text-base">{{ $question }}</span>
+                            <svg class="w-5 h-5 text-indigo-500 flex-shrink-0 transition-transform duration-200"
+                                 :class="{ 'rotate-45': open === {{ $id }} }"
+                                 fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                        </button>
+                        <div class="faq-content" :class="{ 'open': open === {{ $id }} }">
+                            <div class="faq-inner">
+                                <p class="px-6 pb-5 text-gray-500 leading-relaxed text-sm">{{ $answer }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         FINAL CTA
+    ════════════════════════════════════════════════ -->
+    <section class="py-20 sm:py-28 bg-indigo-600 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-80 h-80 rounded-full bg-white/5 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-white/5 translate-x-1/3 translate-y-1/3 pointer-events-none"></div>
+        <div class="dot-pattern absolute inset-0 opacity-20 pointer-events-none"></div>
+
+        <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center scroll-reveal">
+            <h2 class="font-serif-display text-3xl sm:text-5xl text-white leading-tight mb-4">
+                Know your competitive landscape.<br>
+                <em class="text-indigo-200 not-italic">Every single Monday.</em>
+            </h2>
+            <p class="text-indigo-200 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+                Join med spa owners who start each week with a clear picture of where they stand — and what their competitors are doing.
+            </p>
+            @auth
+                <a href="{{ route('home') }}"
+                   class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-indigo-700 text-base font-bold hover:bg-indigo-50 transition-colors shadow-xl">
+                    Go to Dashboard
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
+            @else
+                <a href="{{ route('register') }}"
+                   class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-indigo-700 text-base font-bold hover:bg-indigo-50 transition-colors shadow-xl">
+                    Start Your Free Trial
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                </a>
+                <p class="text-indigo-300 text-sm mt-4">14-day free trial &mdash; no credit card required</p>
+            @endauth
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         FOOTER
+    ════════════════════════════════════════════════ -->
+    <footer class="bg-white border-t border-gray-100 py-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+
+                <!-- Brand -->
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded step-badge flex items-center justify-center">
+                        <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <span class="text-indigo-600 font-bold">PulseTurf</span>
+                    <span class="text-gray-300 select-none">|</span>
+                    <span class="text-gray-400 text-sm">&copy; {{ date('Y') }} All rights reserved.</span>
+                </div>
+
+                <!-- Links -->
+                <div class="flex items-center gap-6 text-sm text-gray-400">
+                    <a href="{{ route('login') }}" class="hover:text-indigo-600 transition-colors font-medium">Log in</a>
+                    @guest
+                        <a href="{{ route('register') }}" class="hover:text-indigo-600 transition-colors font-medium">Sign up</a>
+                    @endguest
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll reveal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.scroll-reveal').forEach(function (el) {
+                observer.observe(el);
+            });
+        });
+    </script>
+
+</body>
 </html>

@@ -12,18 +12,15 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_profile_redirects_to_settings(): void
     {
+        // /profile is now a redirect to /settings for backwards compatibility.
         $user = User::factory()->create();
         Business::factory()->active()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)->get('/profile');
 
-        $response
-            ->assertOk()
-            ->assertSeeVolt('profile.update-profile-information-form')
-            ->assertSeeVolt('profile.update-password-form')
-            ->assertSeeVolt('profile.delete-user-form');
+        $response->assertRedirect('/settings');
     }
 
     public function test_profile_information_can_be_updated(): void

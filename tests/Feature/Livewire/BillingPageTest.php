@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Livewire;
 
-use App\Livewire\BillingPage;
+use App\Livewire\SettingsPage;
 use App\Models\Business;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,9 +11,9 @@ use Stripe\SetupIntent;
 use Tests\TestCase;
 
 /**
- * Tests for the BillingPage Livewire component.
+ * Tests for billing functionality within the SettingsPage Livewire component.
  *
- * BillingPage::render() calls $user->createSetupIntent() which hits the Stripe
+ * SettingsPage::mount() calls $user->createSetupIntent() which hits the Stripe
  * API directly (cURL). We bypass this by creating a partial Mockery mock of the
  * User model and stubbing only that one method to return a fake SetupIntent
  * object, then passing that mock as the authenticated user.
@@ -75,7 +75,7 @@ class BillingPageTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
-    // Accessibility — who can reach the billing page
+    // Accessibility — who can reach the settings page (billing tab)
     // -------------------------------------------------------------------------
 
     public function test_trial_user_can_access_billing_page(): void
@@ -85,20 +85,20 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertOk();
     }
 
     public function test_expired_trial_user_can_access_billing_page(): void
     {
-        // /billing is NOT guarded by the subscribed middleware —
+        // /settings is NOT guarded by the subscribed middleware —
         // expired users must be able to reach it to subscribe.
         $user = $this->makeBillingUser([
             'trial_ends_at' => now()->subDays(1),
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertOk();
     }
 
@@ -114,7 +114,7 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertOk();
     }
 
@@ -138,7 +138,7 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('selectedPlan', 'pro_monthly');
     }
 
@@ -147,7 +147,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('selectedPlan', 'starter_monthly');
     }
 
@@ -163,7 +163,7 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('selectedPlan', 'starter_monthly');
     }
 
@@ -176,7 +176,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('billingError', '');
     }
 
@@ -185,7 +185,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('processing', false);
     }
 
@@ -194,7 +194,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('showCancelModal', false);
     }
 
@@ -203,7 +203,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSet('showUpdateCard', false);
     }
 
@@ -216,7 +216,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->set('selectedPlan', 'pro_monthly')
             ->assertSet('selectedPlan', 'pro_monthly');
     }
@@ -226,7 +226,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->set('selectedPlan', 'pro_annual')
             ->assertSet('selectedPlan', 'pro_annual');
     }
@@ -246,7 +246,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->set('selectedPlan', 'starter_monthly')
             ->call('subscribe', 'pm_fake_payment_method')
             ->assertSet('billingError', 'Please select a valid plan.')
@@ -273,7 +273,7 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->call('swapPlan', 'pro_monthly')
             ->assertSet('billingError', 'Invalid plan selected.')
             ->assertSet('processing', false);
@@ -288,7 +288,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->set('showCancelModal', true)
             ->assertSet('showCancelModal', true);
     }
@@ -304,7 +304,7 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSee('Trial');
     }
 
@@ -315,7 +315,7 @@ class BillingPageTest extends TestCase
         ]);
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSee('Trial Ended');
     }
 
@@ -324,7 +324,7 @@ class BillingPageTest extends TestCase
         $user = $this->makeBillingUser();
 
         Livewire::actingAs($user)
-            ->test(BillingPage::class)
+            ->test(SettingsPage::class)
             ->assertSee('Choose Your Plan');
     }
 }

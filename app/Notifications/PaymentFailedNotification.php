@@ -23,6 +23,6 @@ class PaymentFailedNotification extends Notification implements ShouldQueue
             ->greeting("Hi {$notifiable->name},")
             ->line("We weren't able to process your payment for PulseTurf.")
             ->line('Please update your payment method to avoid any interruption to your service.')
-            ->action('Update Payment Method', route('billing'));
+            ->action('Update Payment Method', route('settings', ['tab' => 'billing']));
     }
 }

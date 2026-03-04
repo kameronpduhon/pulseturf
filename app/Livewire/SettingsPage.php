@@ -2,23 +2,56 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Laravel\Cashier\Exceptions\IncompletePayment;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
-class BillingPage extends Component
+class SettingsPage extends Component
 {
+    // Tab state
+    public string $activeTab = 'account';
+
+    // Account fields
+    public string $name = '';
+    public string $email = '';
+    public string $timezone = 'America/Chicago';
+    public string $currentPassword = '';
+    public string $newPassword = '';
+    public string $newPasswordConfirmation = '';
+
+    // Account status messages
+    public bool $profileSaved = false;
+    public bool $timezoneSaved = false;
+    public bool $passwordSaved = false;
+
+    // Billing state
     public string $selectedPlan = 'starter_monthly';
     public string $billingError = '';
     public bool $processing = false;
     public bool $showCancelModal = false;
     public bool $showUpdateCard = false;
+    #[Locked]
     public string $setupIntentClientSecret = '';
 
-    public function mount(): void
+    public function mount(?string $tab = null): void
     {
         $user = auth()->user();
+
+        $this->name     = $user->name;
+        $this->email    = $user->email;
+        $this->timezone = $user->timezone ?? 'America/Chicago';
+
+        // Allow tab selection via query param or route param
+        $requestedTab = $tab ?? request()->query('tab');
+        if ($requestedTab && in_array($requestedTab, ['account', 'billing'], strict: true)) {
+            $this->activeTab = $requestedTab;
+        }
+
+        // Billing initialization — create SetupIntent once on mount
         $this->setupIntentClientSecret = $user->createSetupIntent()->client_secret;
 
         $subscription = $user->subscription('default');
@@ -31,6 +64,83 @@ class BillingPage extends Component
             }
         }
     }
+
+    public function switchTab(string $tab): void
+    {
+        if (in_array($tab, ['account', 'billing'], strict: true)) {
+            $this->activeTab = $tab;
+
+            if ($tab === 'billing') {
+                $this->dispatch('init-stripe-elements');
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Account methods
+    // -------------------------------------------------------------------------
+
+    public function updateProfile(): void
+    {
+        $user = auth()->user();
+
+        $validated = $this->validate([
+            'name'  => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'email',
+                'lowercase',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
+        ]);
+
+        $user->fill($validated);
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+        $user->save();
+
+        $this->profileSaved = true;
+        $this->dispatch('profile-updated', name: $user->name);
+    }
+
+    public function updateTimezone(): void
+    {
+        $this->validate([
+            'timezone' => ['required', 'string', Rule::in(timezone_identifiers_list())],
+        ]);
+
+        auth()->user()->update(['timezone' => $this->timezone]);
+
+        $this->timezoneSaved = true;
+    }
+
+    public function updatePassword(): void
+    {
+        $this->validate([
+            'currentPassword'         => ['required', 'current_password'],
+            'newPassword'             => ['required', 'string', 'min:8', 'confirmed:newPasswordConfirmation'],
+            'newPasswordConfirmation' => ['required'],
+        ], [
+            'newPassword.confirmed'            => 'The new password confirmation does not match.',
+            'currentPassword.current_password' => 'The current password is incorrect.',
+        ]);
+
+        auth()->user()->update([
+            'password' => Hash::make($this->newPassword),
+        ]);
+
+        $this->currentPassword         = '';
+        $this->newPassword             = '';
+        $this->newPasswordConfirmation = '';
+
+        $this->passwordSaved = true;
+    }
+
+    // -------------------------------------------------------------------------
+    // Billing methods
+    // -------------------------------------------------------------------------
 
     public function subscribe(string $paymentMethodId): void
     {
@@ -130,15 +240,44 @@ class BillingPage extends Component
         }
     }
 
+    public function showUpdateCardForm(): void
+    {
+        $this->showUpdateCard = true;
+        $this->dispatch('showUpdateCard');
+    }
+
+    // -------------------------------------------------------------------------
+    // Render
+    // -------------------------------------------------------------------------
+
     public function render()
     {
         $user = auth()->user();
 
-        return view('livewire.billing-page', [
-            'plans' => $this->getPlans(),
-            'stripeKey' => config('cashier.key'),
-            'user' => $user,
+        return view('livewire.settings-page', [
+            'commonTimezones' => $this->getCommonTimezones(),
+            'allTimezones'    => timezone_identifiers_list(),
+            'plans'           => $this->getPlans(),
+            'stripeKey'       => config('cashier.key'),
+            'user'            => $user,
         ]);
+    }
+
+    // -------------------------------------------------------------------------
+    // Private helpers
+    // -------------------------------------------------------------------------
+
+    private function getCommonTimezones(): array
+    {
+        return [
+            'America/New_York',
+            'America/Chicago',
+            'America/Denver',
+            'America/Los_Angeles',
+            'America/Phoenix',
+            'Pacific/Honolulu',
+            'America/Anchorage',
+        ];
     }
 
     private function getPlans(): array

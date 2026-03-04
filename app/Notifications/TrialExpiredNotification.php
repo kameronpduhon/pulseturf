@@ -24,6 +24,6 @@ class TrialExpiredNotification extends Notification implements ShouldQueue
             ->line('Your PulseTurf trial has ended and your account is currently paused.')
             ->line('The good news: **all your data is still saved**. Your business profile, competitor list, and review history are waiting for you.')
             ->line('Reactivate anytime and you will be back up to speed in minutes — no setup required.')
-            ->action('Reactivate Now', route('billing'));
+            ->action('Reactivate Now', route('settings', ['tab' => 'billing']));
     }
 }
