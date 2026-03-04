@@ -8,7 +8,7 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 - **Phase 1: Database & Models** — ✅ Complete (pushed to GitHub)
 - **Phase 2: Scraping Service** — ✅ Complete (pushed to GitHub)
 - **Phase 3: Auth & Onboarding** — ✅ Complete (pushed to GitHub)
-- **Phase 4: Digest Generation** — Not started
+- **Phase 4: Digest Generation** — ✅ Complete (pushed to GitHub)
 - **Phase 5: Stripe Billing** — Not started
 - **Phase 6: Landing Page & Polish** — Not started
 - **Phase 7: Deploy & Launch Prep** — Not started
@@ -53,6 +53,26 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 - **WelcomeNotification** (`app/Notifications/`): ShouldQueue mail notification
 - **Home page** (`resources/views/home.blade.php`): minimal status card with next digest date
 - **Routes**: `/setup` (auth+verified), `/home` (auth+verified+setup.complete), `/dashboard` → `/home` redirect
+
+## Digest Generation (Phase 4)
+
+- **DigestGeneratorService** (`app/Services/DigestGeneratorService.php`): OpenAI GPT-4o-mini integration
+  - `generate(Business $business): DigestResult` — gathers data, builds prompts, calls OpenAI, parses JSON response
+  - Automatic fallback to template-based digest on any `OpenAIException`
+  - HTML sanitization via `strip_tags()` with allowlist on AI output
+  - `gatherData()` loads business + competitors with 7-day reviews, computes week-over-week deltas
+- **DigestResult** (`app/Services/DigestResult.php`): Readonly DTO (subjectLine, content, prompt, rawResponse, model, tokensUsed, costCents, isFallback)
+- **OpenAIException** (`app/Exceptions/OpenAIException.php`): Static factories `apiError()`, `missingApiKey()`, `rateLimited()`, `malformedResponse()`
+- **GenerateDigestJob** (`app/Jobs/`): 2 retries, creates Digest record, dispatches SendDigestJob delayed to Monday 7 AM user timezone
+- **SendDigestJob** (`app/Jobs/`): 3 retries, atomic idempotency guard (`UPDATE WHERE status != 'sent'`), sends DigestMail
+- **DigestMail** (`app/Mail/DigestMail.php`): Markdown mailable with signed feedback URLs
+- **WeeklyDigestCommand** (`digest:weekly`): Scheduled Sundays 00:00 UTC, chains ScrapeBusinessJob → ScrapeCompetitorJob×N → GenerateDigestJob per eligible user
+- **GenerateDigestCommand** (`digest:generate {userId} {--send}`): Manual trigger with `updateOrCreate` idempotency
+- **DigestFeedbackController** (`app/Http/Controllers/`): Invokable, signed URL, positive/negative feedback
+- **Route**: `GET /digest/{digest}/feedback/{type}` (public, signed middleware)
+- **Email template**: `resources/views/emails/digest.blade.php` (Markdown with feedback buttons)
+- **Feedback page**: `resources/views/feedback/thanks.blade.php` (standalone HTML)
+- **Test fixtures**: `tests/Fixtures/openai/*.json` (2 files)
 
 ## Conventions
 
