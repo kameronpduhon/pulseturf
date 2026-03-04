@@ -9,7 +9,7 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 - **Phase 2: Scraping Service** — ✅ Complete (pushed to GitHub)
 - **Phase 3: Auth & Onboarding** — ✅ Complete (pushed to GitHub)
 - **Phase 4: Digest Generation** — ✅ Complete (pushed to GitHub)
-- **Phase 5: Stripe Billing** — Not started
+- **Phase 5: Stripe Billing** — ✅ Complete
 - **Phase 6: Landing Page & Polish** — Not started
 - **Phase 7: Deploy & Launch Prep** — Not started
 
@@ -73,6 +73,34 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 - **Email template**: `resources/views/emails/digest.blade.php` (Markdown with feedback buttons)
 - **Feedback page**: `resources/views/feedback/thanks.blade.php` (standalone HTML)
 - **Test fixtures**: `tests/Fixtures/openai/*.json` (2 files)
+
+## Stripe Billing (Phase 5)
+
+- **EnsureSubscribed middleware** (`app/Http/Middleware/`): alias `subscribed`, gates `/home` and `/profile`; allows trial OR subscribed users through
+- **BillingPage** (`app/Livewire/BillingPage.php`): Full Livewire component with Stripe Elements integration
+  - `mount()`: creates SetupIntent once (stored as `$setupIntentClientSecret`), pre-selects current plan if subscribed
+  - `subscribe(paymentMethodId)`: creates Cashier subscription, clears `trial_ends_at`, redirects to `/home`
+  - `swapPlan(planKey)`: swaps subscription price via Cashier, server-side guard against no-op
+  - `updatePaymentMethod(paymentMethodId)`: updates default payment method
+  - `cancelSubscription()` / `resumeSubscription()`: cancel at period end / resume from grace period
+  - Private helpers: `getPlans()` (4-plan array), `getPriceId()`, `getPlanKeyFromPriceId()`
+- **Billing view** (`resources/views/livewire/billing-page.blade.php`): 3 states (trial, subscribed, expired)
+  - `@assets` loads Stripe.js, `@script` handles `confirmCardSetup()` flow
+  - `wire:ignore` on card elements prevents Livewire from destroying Stripe Elements
+  - Cancel confirmation modal, grace period resume, past-due warning banner
+- **StripeWebhookController** (`app/Http/Controllers/`): extends Cashier's WebhookController
+  - `handleInvoicePaymentFailed`: sends PaymentFailedNotification
+  - `handleCustomerSubscriptionDeleted`: calls parent first (syncs DB), sends SubscriptionCancelledNotification
+- **TrialReminderCommand** (`trial:reminders`): scheduled daily at 09:00
+  - Sends TrialEndingNotification (2 days), TrialLastDayNotification (1 day), TrialExpiredNotification (today)
+  - Filters `whereDoesntHave('subscriptions')` to skip converted users, uses `cursor()` for memory efficiency
+- **5 Notifications** (all ShouldQueue, Queueable, MailMessage builder pattern):
+  - `TrialEndingNotification`, `TrialLastDayNotification`, `TrialExpiredNotification`
+  - `PaymentFailedNotification`, `SubscriptionCancelledNotification`
+- **User model updates**: `isSubscribedOrTrial()`, plan-aware `competitorLimit()` (Pro=3, Starter/trial=1)
+- **Routes**: `/billing` (auth+verified+setup.complete, NOT subscribed-gated), `/stripe/webhook` (POST, CSRF-exempt)
+- **CSRF exemption**: `stripe/*` in bootstrap/app.php; `Cashier::ignoreRoutes()` in AppServiceProvider
+- **Navigation**: Billing link in desktop + mobile nav, trial countdown badge ("Trial: Xd left")
 
 ## Conventions
 
