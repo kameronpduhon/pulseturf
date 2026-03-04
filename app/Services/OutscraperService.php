@@ -68,16 +68,19 @@ class OutscraperService
             throw OutscraperException::noResults($placeId);
         }
 
-        $reviewsData = $data[0]['reviews_data'] ?? [];
+        // Handle double-nested structure when async=false
+        $firstResult = $data[0];
+        $businessData = isset($firstResult[0]) ? $firstResult[0] : $firstResult;
+        $reviewsData = $businessData['reviews_data'] ?? [];
 
         if (empty($reviewsData)) {
             throw OutscraperException::noResults($placeId);
         }
 
         return array_map(fn (array $review) => [
-            'google_review_id' => $review['review_link'] ?? $review['google_id'] ?? null,
-            'author_name' => $review['autor_name'] ?? null,
-            'author_image' => $review['autor_image'] ?? null,
+            'google_review_id' => $review['review_link'] ?? $review['review_id'] ?? null,
+            'author_name' => $review['author_title'] ?? null,
+            'author_image' => $review['author_image'] ?? null,
             'rating' => $review['review_rating'] ?? null,
             'text' => $review['review_text'] ?? null,
             'published_at' => $review['review_datetime_utc'] ?? null,
