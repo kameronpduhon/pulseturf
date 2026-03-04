@@ -12,8 +12,8 @@ class DigestHistory extends Component
     public function render()
     {
         $digests = Digest::where('user_id', auth()->id())
-            ->where('status', 'sent')
-            ->latest('sent_at')
+            ->whereNotNull('html_content')
+            ->latest()
             ->get();
 
         return view('livewire.digest-history', compact('digests'));
