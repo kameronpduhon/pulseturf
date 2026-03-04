@@ -33,6 +33,9 @@ new class extends Component
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                         {{ __('Home') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('digests')" :active="request()->routeIs('digests')" wire:navigate>
+                        {{ __('Digests') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
                         {{ __('Settings') }}
                     </x-nav-link>
@@ -92,6 +95,9 @@ new class extends Component
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                 {{ __('Home') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('digests')" :active="request()->routeIs('digests')" wire:navigate>
+                {{ __('Digests') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
                 {{ __('Settings') }}

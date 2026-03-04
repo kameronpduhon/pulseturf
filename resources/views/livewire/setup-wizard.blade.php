@@ -445,56 +445,129 @@
         {{-- STEP 3: Scraping In Progress                                       --}}
         {{-- ================================================================= --}}
         @if ($currentStep === 3)
+            @php
+                $totalItems = count($scrapeStatuses);
+                $doneItems = collect($scrapeStatuses)->filter(fn($s) => in_array($s['status'], ['complete', 'failed']))->count();
+                $allDone = $totalItems > 0 && $doneItems === $totalItems;
+                $progressPct = $totalItems > 0 ? (int)(($doneItems / $totalItems) * 100) : 0;
+            @endphp
             <div wire:poll.3s="checkScrapeProgress" class="bg-white shadow-sm sm:rounded-2xl border border-gray-100">
-                <div class="p-6 sm:p-8 text-center">
-                    <div class="mb-6">
-                        <svg class="mx-auto animate-spin h-12 w-12 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                        </svg>
+                <div class="p-6 sm:p-8">
+                    {{-- Header --}}
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 mb-4">
+                            @if ($allDone)
+                                <svg class="w-7 h-7 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            @else
+                                <svg class="w-7 h-7 animate-spin text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                </svg>
+                            @endif
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-900 mb-1">Building your intelligence briefing</h2>
+                        <p class="text-sm text-gray-500">We're pulling your Google reviews right now. Hang tight — this takes 30–60 seconds.</p>
                     </div>
 
-                    <h2 class="text-xl font-semibold text-gray-900 mb-2">Setting up your first intelligence briefing...</h2>
-                    <p class="text-sm text-gray-500 mb-8">We're pulling reviews and ratings from Google. This usually takes about a minute.</p>
+                    {{-- Progress bar --}}
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-medium text-gray-500">Progress</span>
+                            <span class="text-xs font-semibold text-indigo-600">{{ $progressPct }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-100 rounded-full h-2">
+                            <div
+                                class="bg-indigo-600 h-2 rounded-full transition-all duration-700 ease-in-out"
+                                style="width: {{ max(8, $progressPct) }}%"
+                            ></div>
+                        </div>
+                    </div>
 
-                    @if (count($scrapeStatuses) > 0)
-                        <div class="text-left space-y-3 max-w-sm mx-auto">
-                            @foreach ($scrapeStatuses as $key => $item)
-                                <div class="flex items-center gap-3">
-                                    @if ($item['status'] === 'complete')
-                                        <span class="w-5 h-5 flex items-center justify-center rounded-full bg-green-100">
-                                            <svg class="w-3 h-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
-                                            </svg>
-                                        </span>
-                                    @elseif ($item['status'] === 'failed')
-                                        <span class="w-5 h-5 flex items-center justify-center rounded-full bg-yellow-100">
-                                            <svg class="w-3 h-3 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18A9 9 0 0112 3z"/>
-                                            </svg>
-                                        </span>
-                                    @else
-                                        <svg class="w-5 h-5 animate-spin text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    {{-- Steps --}}
+                    <div class="space-y-3">
+                        {{-- Step: Connecting to Google --}}
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-green-50 border border-green-100">
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-green-100 shrink-0">
+                                <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </span>
+                            <div class="text-sm">
+                                <span class="font-medium text-gray-800">Connected to Google</span>
+                                <span class="ml-1 text-green-600 text-xs font-medium">Done</span>
+                            </div>
+                        </div>
+
+                        {{-- Per-business scrape statuses --}}
+                        @foreach ($scrapeStatuses as $key => $item)
+                            <div class="flex items-center gap-3 p-3 rounded-xl
+                                {{ $item['status'] === 'complete' ? 'bg-green-50 border border-green-100' : ($item['status'] === 'failed' ? 'bg-yellow-50 border border-yellow-100' : 'bg-indigo-50 border border-indigo-100') }}">
+
+                                @if ($item['status'] === 'complete')
+                                    <span class="w-7 h-7 flex items-center justify-center rounded-full bg-green-100 shrink-0">
+                                        <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </span>
+                                @elseif ($item['status'] === 'failed')
+                                    <span class="w-7 h-7 flex items-center justify-center rounded-full bg-yellow-100 shrink-0">
+                                        <svg class="w-3.5 h-3.5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18A9 9 0 0112 3z"/>
+                                        </svg>
+                                    </span>
+                                @else
+                                    <span class="w-7 h-7 flex items-center justify-center shrink-0">
+                                        <svg class="w-5 h-5 animate-spin text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                                         </svg>
-                                    @endif
-                                    <div class="text-sm">
-                                        <span class="font-medium text-gray-800">{{ $item['name'] }}</span>
-                                        <span class="ml-2 text-gray-500">
-                                            @if ($item['status'] === 'complete')
-                                                Complete
-                                            @elseif ($item['status'] === 'failed')
-                                                Failed (will retry later)
-                                            @else
-                                                Scraping...
-                                            @endif
-                                        </span>
-                                    </div>
+                                    </span>
+                                @endif
+
+                                <div class="text-sm flex-1 min-w-0">
+                                    <span class="font-medium text-gray-800 truncate block">{{ $item['name'] }}</span>
+                                    <span class="text-xs
+                                        {{ $item['status'] === 'complete' ? 'text-green-600' : ($item['status'] === 'failed' ? 'text-yellow-600' : 'text-indigo-500') }}">
+                                        @if ($item['status'] === 'complete')
+                                            Reviews scraped ✓
+                                        @elseif ($item['status'] === 'failed')
+                                            Partial data (will retry weekly)
+                                        @else
+                                            Fetching reviews from Google...
+                                        @endif
+                                    </span>
                                 </div>
-                            @endforeach
+                            </div>
+                        @endforeach
+
+                        {{-- Final step: Building briefing --}}
+                        <div class="flex items-center gap-3 p-3 rounded-xl
+                            {{ $allDone ? 'bg-green-50 border border-green-100' : 'bg-gray-50 border border-gray-200' }}">
+                            @if ($allDone)
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full bg-green-100 shrink-0">
+                                    <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </span>
+                            @else
+                                <span class="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 shrink-0">
+                                    <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                </span>
+                            @endif
+                            <div class="text-sm">
+                                <span class="font-medium {{ $allDone ? 'text-gray-800' : 'text-gray-400' }}">Schedule your first briefing</span>
+                                @if ($allDone)
+                                    <span class="ml-1 text-green-600 text-xs font-medium">Done</span>
+                                @else
+                                    <span class="block text-xs text-gray-400">Waiting for reviews...</span>
+                                @endif
+                            </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         @endif

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DigestFeedbackController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Livewire\DigestHistory;
 use App\Livewire\SettingsPage;
 use App\Livewire\SetupWizard;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +42,7 @@ Route::middleware(['auth', 'verified', 'setup.complete'])->group(function () {
 // Authenticated + Verified + Setup Complete + Subscribed (or on trial)
 Route::middleware(['auth', 'verified', 'setup.complete', 'subscribed'])->group(function () {
     Route::view('/home', 'home')->name('home');
+    Route::get('/digests', DigestHistory::class)->name('digests');
 });
 
 require __DIR__.'/auth.php';
