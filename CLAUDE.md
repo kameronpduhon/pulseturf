@@ -7,7 +7,7 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 - **Phase 0: Project Setup** — ✅ Complete (pushed to GitHub)
 - **Phase 1: Database & Models** — ✅ Complete (pushed to GitHub)
 - **Phase 2: Scraping Service** — ✅ Complete (pushed to GitHub)
-- **Phase 3: Auth & Onboarding** — ✅ Complete
+- **Phase 3: Auth & Onboarding** — ✅ Complete (pushed to GitHub)
 - **Phase 4: Digest Generation** — Not started
 - **Phase 5: Stripe Billing** — Not started
 - **Phase 6: Landing Page & Polish** — Not started
