@@ -60,7 +60,7 @@
                             class="border-t border-gray-100"
                         >
                             <div class="p-5 prose prose-sm max-w-none text-gray-700">
-                                {!! $digest->content !!}
+                                {!! $digest->html_content !!}
                             </div>
                         </div>
                     </div>
