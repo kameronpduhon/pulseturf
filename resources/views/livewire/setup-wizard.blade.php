@@ -36,7 +36,7 @@
         {{-- STEP 1: Your Business                                              --}}
         {{-- ================================================================= --}}
         @if ($currentStep === 1)
-            <div class="bg-white shadow-sm sm:rounded-lg">
+            <div class="bg-white shadow-sm sm:rounded-2xl border border-gray-100">
                 <div class="p-6 sm:p-8">
                     <h2 class="text-xl font-semibold text-gray-900 mb-1">Tell us about your business</h2>
                     <p class="text-sm text-gray-500 mb-6">We'll look it up on Google to get your rating and reviews.</p>
@@ -216,7 +216,7 @@
         {{-- STEP 2: Competitors                                                --}}
         {{-- ================================================================= --}}
         @if ($currentStep === 2)
-            <div class="bg-white shadow-sm sm:rounded-lg">
+            <div class="bg-white shadow-sm sm:rounded-2xl border border-gray-100">
                 <div class="p-6 sm:p-8">
                     <h2 class="text-xl font-semibold text-gray-900 mb-1">Add your competitors</h2>
                     <p class="text-sm text-gray-500 mb-6">
@@ -445,7 +445,7 @@
         {{-- STEP 3: Scraping In Progress                                       --}}
         {{-- ================================================================= --}}
         @if ($currentStep === 3)
-            <div wire:poll.3s="checkScrapeProgress" class="bg-white shadow-sm sm:rounded-lg">
+            <div wire:poll.3s="checkScrapeProgress" class="bg-white shadow-sm sm:rounded-2xl border border-gray-100">
                 <div class="p-6 sm:p-8 text-center">
                     <div class="mb-6">
                         <svg class="mx-auto animate-spin h-12 w-12 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -503,11 +503,11 @@
         {{-- STEP 4: All Set                                                    --}}
         {{-- ================================================================= --}}
         @if ($currentStep === 4)
-            <div class="bg-white shadow-sm sm:rounded-lg">
+            <div class="bg-white shadow-sm sm:rounded-2xl border border-gray-100">
                 <div class="p-6 sm:p-8 text-center">
                     <div class="mb-5">
-                        <span class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100">
-                            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 border border-indigo-100">
+                            <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                         </span>

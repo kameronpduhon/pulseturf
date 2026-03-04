@@ -5,6 +5,7 @@ namespace Tests\Feature\Middleware;
 use App\Models\Business;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Stripe\SetupIntent;
 use Tests\TestCase;
 
 /**
@@ -58,22 +59,34 @@ class EnsureSetupCompleteTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
-    public function test_middleware_allows_profile_access_with_active_business(): void
+    public function test_middleware_allows_settings_access_with_active_business(): void
     {
+        // /settings calls createSetupIntent() in mount() — stub it to avoid Stripe API call.
         $user = User::factory()->create();
         Business::factory()->active()->create(['user_id' => $user->id]);
+        $user->refresh();
 
-        $response = $this->actingAs($user)->get('/profile');
+        $fakeIntent = SetupIntent::constructFrom([
+            'id'            => 'seti_test_fake',
+            'object'        => 'setup_intent',
+            'client_secret' => 'seti_test_fake_secret',
+            'status'        => 'requires_payment_method',
+        ]);
+
+        $mock = \Mockery::mock($user)->makePartial();
+        $mock->shouldReceive('createSetupIntent')->andReturn($fakeIntent);
+
+        $response = $this->actingAs($mock)->get('/settings');
 
         $response->assertOk();
     }
 
-    public function test_middleware_blocks_profile_access_without_active_business(): void
+    public function test_middleware_blocks_settings_access_without_active_business(): void
     {
         $user = User::factory()->create();
-        // No active business
+        // No active business — redirect fires before mount(), no Stripe mock needed.
 
-        $response = $this->actingAs($user)->get('/profile');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertRedirect(route('setup'));
     }

@@ -26,6 +26,6 @@ class TrialEndingNotification extends Notification implements ShouldQueue
             ->line('- Competitor review tracking and monitoring')
             ->line('- Automated Google review scraping')
             ->line('Choose a plan now to keep your competitive edge uninterrupted.')
-            ->action('Choose a Plan', route('billing'));
+            ->action('Choose a Plan', route('settings', ['tab' => 'billing']));
     }
 }

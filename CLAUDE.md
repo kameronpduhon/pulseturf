@@ -10,7 +10,7 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 - **Phase 3: Auth & Onboarding** — ✅ Complete (pushed to GitHub)
 - **Phase 4: Digest Generation** — ✅ Complete (pushed to GitHub)
 - **Phase 5: Stripe Billing** — ✅ Complete (pushed to GitHub)
-- **Phase 6: Landing Page & Polish** — Not started
+- **Phase 6: Landing Page & Polish** — ✅ Complete
 - **Phase 7: Deploy & Launch Prep** — Not started
 
 ## Tech Stack
@@ -76,18 +76,7 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
 
 ## Stripe Billing (Phase 5)
 
-- **EnsureSubscribed middleware** (`app/Http/Middleware/`): alias `subscribed`, gates `/home` and `/profile`; allows trial OR subscribed users through
-- **BillingPage** (`app/Livewire/BillingPage.php`): Full Livewire component with Stripe Elements integration
-  - `mount()`: creates SetupIntent once (stored as `$setupIntentClientSecret`), pre-selects current plan if subscribed
-  - `subscribe(paymentMethodId)`: creates Cashier subscription, clears `trial_ends_at`, redirects to `/home`
-  - `swapPlan(planKey)`: swaps subscription price via Cashier, server-side guard against no-op
-  - `updatePaymentMethod(paymentMethodId)`: updates default payment method
-  - `cancelSubscription()` / `resumeSubscription()`: cancel at period end / resume from grace period
-  - Private helpers: `getPlans()` (4-plan array), `getPriceId()`, `getPlanKeyFromPriceId()`
-- **Billing view** (`resources/views/livewire/billing-page.blade.php`): 3 states (trial, subscribed, expired)
-  - `@assets` loads Stripe.js, `@script` handles `confirmCardSetup()` flow
-  - `wire:ignore` on card elements prevents Livewire from destroying Stripe Elements
-  - Cancel confirmation modal, grace period resume, past-due warning banner
+- **EnsureSubscribed middleware** (`app/Http/Middleware/`): alias `subscribed`, gates `/home`; allows trial OR subscribed users through; redirects to `/settings?tab=billing`
 - **StripeWebhookController** (`app/Http/Controllers/`): extends Cashier's WebhookController
   - `handleInvoicePaymentFailed`: sends PaymentFailedNotification
   - `handleCustomerSubscriptionDeleted`: calls parent first (syncs DB), sends SubscriptionCancelledNotification
@@ -98,9 +87,28 @@ Med spa competitive intelligence SaaS built with Laravel 12 + Livewire 3.
   - `TrialEndingNotification`, `TrialLastDayNotification`, `TrialExpiredNotification`
   - `PaymentFailedNotification`, `SubscriptionCancelledNotification`
 - **User model updates**: `isSubscribedOrTrial()`, plan-aware `competitorLimit()` (Pro=3, Starter/trial=1)
-- **Routes**: `/billing` (auth+verified+setup.complete, NOT subscribed-gated), `/stripe/webhook` (POST, CSRF-exempt)
+- **Routes**: `/stripe/webhook` (POST, CSRF-exempt); billing now at `/settings?tab=billing` (see Phase 6)
 - **CSRF exemption**: `stripe/*` in bootstrap/app.php; `Cashier::ignoreRoutes()` in AppServiceProvider
-- **Navigation**: Billing link in desktop + mobile nav, trial countdown badge ("Trial: Xd left")
+- **Navigation**: Settings link in desktop + mobile nav, trial countdown badge ("Trial: Xd left")
+
+## Landing Page & Polish (Phase 6)
+
+- **Landing page** (`resources/views/welcome.blade.php`): Standalone marketing page with hero, how-it-works, pricing, FAQ, footer
+  - Alpine.js monthly/annual pricing toggle, FAQ accordion
+  - `@auth` / `@guest` directives for nav (Dashboard vs Login/Register)
+  - Starter ($29/mo, $290/yr, 1 competitor) and Pro ($79/mo, $790/yr, 3 competitors)
+- **SettingsPage** (`app/Livewire/SettingsPage.php`): Unified settings with Account + Billing tabs
+  - Account tab: profile update (with email re-verification), timezone update, password change
+  - Billing tab: all billing methods moved from deprecated BillingPage (subscribe, swapPlan, updatePaymentMethod, cancel, resume)
+  - Stripe Elements preserved via `x-show` tab panels + `wire:ignore.self` + `init-stripe-elements` event
+  - `$setupIntentClientSecret` marked `#[Locked]`
+- **Route consolidation**: `/settings` (auth+verified+setup.complete, NOT subscribed-gated)
+  - `/profile` → redirects to `/settings`
+  - `/billing` → redirects to `/settings?tab=billing`
+  - EnsureSubscribed redirects to `/settings?tab=billing`
+- **Notifications**: All 5 billing notifications updated from `route('billing')` to `route('settings', ['tab' => 'billing'])`
+- **Visual consistency**: PulseTurf text logo, indigo-600 accent, rounded-2xl cards, Figtree font, trial messaging on register
+- **Deleted files**: `app/Livewire/BillingPage.php`, `resources/views/livewire/billing-page.blade.php`, `resources/views/profile.blade.php`
 
 ## Conventions
 

@@ -27,6 +27,6 @@ class TrialLastDayNotification extends Notification implements ShouldQueue
             ->line('- **Competitor tracking** — stay ahead of rivals in your market')
             ->line('- **Review monitoring** — never miss what patients are saying')
             ->line('Your data stays intact — subscribe now and pick up right where you left off.')
-            ->action('Subscribe Now', route('billing'));
+            ->action('Subscribe Now', route('settings', ['tab' => 'billing']));
     }
 }

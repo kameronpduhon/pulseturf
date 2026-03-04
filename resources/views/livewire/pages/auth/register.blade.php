@@ -40,6 +40,12 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
+    <!-- Trial messaging -->
+    <div class="mb-6 rounded-xl bg-indigo-50 border border-indigo-100 px-4 py-3.5 text-center">
+        <p class="text-sm font-semibold text-indigo-700">14-day free trial &mdash; no credit card required</p>
+        <p class="text-xs text-indigo-500 mt-0.5">Full access to every feature. Cancel any time.</p>
+    </div>
+
     <form wire:submit="register">
         <!-- Name -->
         <div>
@@ -87,13 +93,13 @@ new #[Layout('layouts.guest')] class extends Component
             });
         </script>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
+        <div class="flex items-center justify-between mt-6">
+            <a class="text-sm text-gray-500 hover:text-indigo-600 transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
+            <x-primary-button>
+                {{ __('Create Account') }}
             </x-primary-button>
         </div>
     </form>

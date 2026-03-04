@@ -9,15 +9,16 @@ use Stripe\SetupIntent;
 use Tests\TestCase;
 
 /**
- * Tests for /billing route access control and the interaction between
- * the setup.complete and subscribed middleware on /home.
+ * Tests for /settings (billing tab) route access control and the interaction
+ * between setup.complete and subscribed middleware on /home.
  *
  * Route middleware stack (from routes/web.php):
- *   /billing — auth, verified, setup.complete  (NOT subscribed — intentional)
- *   /home    — auth, verified, setup.complete, subscribed
+ *   /settings — auth, verified, setup.complete  (NOT subscribed — intentional)
+ *   /home     — auth, verified, setup.complete, subscribed
+ *   /billing  — legacy redirect to /settings?tab=billing
  *
- * Because /billing renders the BillingPage Livewire component, which calls
- * $user->createSetupIntent() in render(), tests that must reach a 200 response
+ * Because /settings renders the SettingsPage Livewire component, which calls
+ * $user->createSetupIntent() in mount(), tests that must reach a 200 response
  * use a Mockery partial mock that stubs out that one Stripe API call.
  * Tests that assert a redirect (auth, setup, subscription guards) never reach
  * the component render phase, so they use plain User models.
@@ -31,7 +32,7 @@ class BillingRoutesTest extends TestCase
     // -------------------------------------------------------------------------
 
     /**
-     * Create a fake \Stripe\SetupIntent so render() doesn't hit the network.
+     * Create a fake \Stripe\SetupIntent so mount() doesn't hit the network.
      */
     private function fakeSetupIntent(): SetupIntent
     {
@@ -46,7 +47,7 @@ class BillingRoutesTest extends TestCase
     /**
      * Create a user with an active business, returning a Mockery partial mock
      * that stubs createSetupIntent(). Use this for tests that assert assertOk()
-     * on /billing (the component render phase must succeed).
+     * on /settings (the component render phase must succeed).
      */
     private function mockUserWithActiveBusiness(array $userAttributes = []): \Mockery\MockInterface
     {
@@ -90,7 +91,7 @@ class BillingRoutesTest extends TestCase
     }
 
     /**
-     * Create a plain subscribed user (for /home tests which never render BillingPage).
+     * Create a plain subscribed user (for /home tests which never render SettingsPage).
      */
     private function subscribedUserWithBusiness(): User
     {
@@ -107,91 +108,113 @@ class BillingRoutesTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
-    // /billing — authentication
+    // /billing legacy redirect
     // -------------------------------------------------------------------------
 
-    public function test_billing_requires_authentication(): void
+    public function test_billing_url_redirects_to_settings_billing_tab(): void
+    {
+        $user = $this->userWithActiveBusiness([
+            'trial_ends_at' => now()->addDays(7),
+        ]);
+
+        $response = $this->actingAs($user)->get('/billing');
+
+        $response->assertRedirect('/settings?tab=billing');
+    }
+
+    public function test_billing_redirect_requires_authentication(): void
     {
         $response = $this->get('/billing');
 
         $response->assertRedirect(route('login'));
     }
 
-    public function test_billing_requires_verified_email(): void
+    // -------------------------------------------------------------------------
+    // /settings — authentication
+    // -------------------------------------------------------------------------
+
+    public function test_settings_requires_authentication(): void
+    {
+        $response = $this->get('/settings');
+
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_settings_requires_verified_email(): void
     {
         $user = User::factory()->unverified()->create();
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertRedirect(route('verification.notice'));
     }
 
     // -------------------------------------------------------------------------
-    // /billing — setup.complete (redirects fire before render — no mock needed)
+    // /settings — setup.complete (redirects fire before render — no mock needed)
     // -------------------------------------------------------------------------
 
-    public function test_billing_requires_setup_complete_redirects_without_active_business(): void
+    public function test_settings_requires_setup_complete_redirects_without_active_business(): void
     {
         $user = User::factory()->create();
         // No business at all
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertRedirect(route('setup'));
     }
 
-    public function test_billing_requires_setup_complete_redirects_with_pending_setup_business(): void
+    public function test_settings_requires_setup_complete_redirects_with_pending_setup_business(): void
     {
         $user = User::factory()->create();
         Business::factory()->pendingSetup()->create(['user_id' => $user->id]);
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertRedirect(route('setup'));
     }
 
     // -------------------------------------------------------------------------
-    // /billing — NOT gated by subscribed middleware
+    // /settings — NOT gated by subscribed middleware
     // -------------------------------------------------------------------------
 
-    public function test_billing_is_accessible_to_trial_user(): void
+    public function test_settings_is_accessible_to_trial_user(): void
     {
-        // Trial users must be able to reach /billing to subscribe.
+        // Trial users must be able to reach /settings to subscribe.
         $user = $this->mockUserWithActiveBusiness([
             'trial_ends_at' => now()->addDays(7),
         ]);
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertOk();
     }
 
-    public function test_billing_is_accessible_to_expired_trial_user(): void
+    public function test_settings_is_accessible_to_expired_trial_user(): void
     {
-        // Expired users must be able to reach /billing — it is the recovery path.
+        // Expired users must be able to reach /settings — it is the recovery path.
         $user = $this->mockUserWithActiveBusiness([
             'trial_ends_at' => now()->subDays(1),
         ]);
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertOk();
     }
 
-    public function test_billing_is_accessible_to_user_with_no_trial_and_no_subscription(): void
+    public function test_settings_is_accessible_to_user_with_no_trial_and_no_subscription(): void
     {
         $user = $this->mockUserWithActiveBusiness(['trial_ends_at' => null]);
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertOk();
     }
 
-    public function test_billing_is_accessible_to_subscribed_user(): void
+    public function test_settings_is_accessible_to_subscribed_user(): void
     {
         $user = $this->mockSubscribedUserWithBusiness();
 
-        $response = $this->actingAs($user)->get('/billing');
+        $response = $this->actingAs($user)->get('/settings');
 
         $response->assertOk();
     }
@@ -220,7 +243,7 @@ class BillingRoutesTest extends TestCase
         $response->assertOk();
     }
 
-    public function test_home_redirects_expired_non_subscribed_user_to_billing(): void
+    public function test_home_redirects_expired_non_subscribed_user_to_settings_billing_tab(): void
     {
         $user = $this->userWithActiveBusiness([
             'trial_ends_at' => now()->subDays(1),
@@ -228,22 +251,22 @@ class BillingRoutesTest extends TestCase
 
         $response = $this->actingAs($user)->get('/home');
 
-        $response->assertRedirect(route('billing'));
+        $response->assertRedirect(route('settings', ['tab' => 'billing']));
     }
 
-    public function test_home_redirects_user_with_no_trial_and_no_subscription_to_billing(): void
+    public function test_home_redirects_user_with_no_trial_and_no_subscription_to_settings_billing_tab(): void
     {
         $user = $this->userWithActiveBusiness(['trial_ends_at' => null]);
 
         $response = $this->actingAs($user)->get('/home');
 
-        $response->assertRedirect(route('billing'));
+        $response->assertRedirect(route('settings', ['tab' => 'billing']));
     }
 
     public function test_home_requires_setup_complete_before_subscribed_check(): void
     {
         // Without an active business, setup.complete fires first → redirects to /setup,
-        // not /billing. This confirms middleware ordering.
+        // not /settings. This confirms middleware ordering.
         $user = User::factory()->create(['trial_ends_at' => null]);
         // No business
 
@@ -269,11 +292,16 @@ class BillingRoutesTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
-    // /billing named route resolution
+    // /settings named route resolution
     // -------------------------------------------------------------------------
 
-    public function test_billing_route_is_named_billing(): void
+    public function test_settings_route_is_named_settings(): void
     {
-        $this->assertEquals('/billing', route('billing', [], false));
+        $this->assertEquals('/settings', route('settings', [], false));
+    }
+
+    public function test_settings_billing_tab_url(): void
+    {
+        $this->assertEquals('/settings?tab=billing', route('settings', ['tab' => 'billing'], false));
     }
 }

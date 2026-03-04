@@ -33,8 +33,8 @@ new class extends Component
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                         {{ __('Home') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('billing')" :active="request()->routeIs('billing')" wire:navigate>
-                        {{ __('Billing') }}
+                    <x-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
+                        {{ __('Settings') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -61,12 +61,8 @@ new class extends Component
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('billing')" wire:navigate>
-                            {{ __('Billing') }}
-                        </x-dropdown-link>
-
-                        <x-dropdown-link :href="route('profile')" wire:navigate>
-                            {{ __('Profile') }}
+                        <x-dropdown-link :href="route('settings')" wire:navigate>
+                            {{ __('Settings') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -97,8 +93,8 @@ new class extends Component
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                 {{ __('Home') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('billing')" :active="request()->routeIs('billing')" wire:navigate>
-                {{ __('Billing') }}
+            <x-responsive-nav-link :href="route('settings')" :active="request()->routeIs('settings')" wire:navigate>
+                {{ __('Settings') }}
             </x-responsive-nav-link>
         </div>
 
@@ -116,12 +112,8 @@ new class extends Component
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('billing')" wire:navigate>
-                    {{ __('Billing') }}
-                </x-responsive-nav-link>
-
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
+                <x-responsive-nav-link :href="route('settings')" wire:navigate>
+                    {{ __('Settings') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

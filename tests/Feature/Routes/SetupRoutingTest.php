@@ -145,26 +145,31 @@ class SetupRoutingTest extends TestCase
     }
 
     // -------------------------------------------------------------------------
-    // /profile (also protected by setup.complete)
+    // /profile — legacy redirect to /settings
     // -------------------------------------------------------------------------
 
-    public function test_profile_redirects_to_setup_without_active_business(): void
+    public function test_profile_redirects_to_settings(): void
     {
-        $user = User::factory()->create();
-        // No active business
-
-        $response = $this->actingAs($user)->get('/profile');
-
-        $response->assertRedirect(route('setup'));
-    }
-
-    public function test_profile_is_accessible_with_active_business(): void
-    {
+        // /profile is a legacy redirect to /settings for backwards compatibility.
         $user = User::factory()->create();
         Business::factory()->active()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)->get('/profile');
 
-        $response->assertOk();
+        $response->assertRedirect('/settings');
+    }
+
+    // -------------------------------------------------------------------------
+    // /settings (also protected by setup.complete)
+    // -------------------------------------------------------------------------
+
+    public function test_settings_redirects_to_setup_without_active_business(): void
+    {
+        $user = User::factory()->create();
+        // No active business
+
+        $response = $this->actingAs($user)->get('/settings');
+
+        $response->assertRedirect(route('setup'));
     }
 }
