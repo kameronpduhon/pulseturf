@@ -27,6 +27,7 @@ class OutscraperService
         $response = $this->request('/maps/search-v3', [
             'query' => $query,
             'limit' => 1,
+            'async' => 'false',
         ]);
 
         $results = $response['data'] ?? [];
@@ -88,6 +89,7 @@ class OutscraperService
         $response = $this->request('/maps/search-v3', [
             'query' => $placeId,
             'limit' => 1,
+            'async' => 'false',
         ]);
 
         $results = $response['data'] ?? [];
