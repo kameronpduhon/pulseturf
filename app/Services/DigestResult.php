@@ -7,6 +7,7 @@ class DigestResult
     public function __construct(
         public readonly string $subjectLine,
         public readonly string $content,
+        public readonly ?array $contentJson,
         public readonly ?string $prompt,
         public readonly ?string $rawResponse,
         public readonly ?string $model,

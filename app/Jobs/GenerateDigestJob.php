@@ -57,6 +57,7 @@ class GenerateDigestJob implements ShouldQueue
             'week_start' => $weekStart,
             'subject_line' => $result->subjectLine,
             'html_content' => $result->content,
+            'content_json' => $result->contentJson,
             'llm_model' => $result->model,
             'llm_prompt' => $result->prompt,
             'llm_response' => $result->rawResponse,
