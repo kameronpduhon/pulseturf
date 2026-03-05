@@ -103,4 +103,11 @@ new #[Layout('layouts.guest')] class extends Component
             </x-primary-button>
         </div>
     </form>
+
+    <p class="text-xs text-gray-400 text-center mt-4">
+        By creating an account, you agree to our
+        <a href="{{ route('terms') }}" class="text-indigo-600 hover:underline">Terms of Service</a>
+        and
+        <a href="{{ route('privacy') }}" class="text-indigo-600 hover:underline">Privacy Policy</a>.
+    </p>
 </div>
