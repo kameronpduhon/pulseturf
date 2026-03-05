@@ -89,10 +89,17 @@ class DigestPipelineTest extends TestCase
 
         $this->assertFalse($result->isFallback);
         $this->assertSame('Your Weekly Med Spa Intel: 4.8★ Rating Holds Strong', $result->subjectLine);
-        $this->assertStringContainsString('<h2>Performance Snapshot</h2>', $result->content);
-        $this->assertStringContainsString('<h2>Competitor Watch</h2>', $result->content);
+        $this->assertStringContainsString('Performance Snapshot', $result->content);
+        $this->assertStringContainsString('Competitor Watch', $result->content);
+        $this->assertIsArray($result->contentJson);
+        $this->assertArrayHasKey('performance_snapshot', $result->contentJson);
+        $this->assertArrayHasKey('review_highlights', $result->contentJson);
+        $this->assertArrayHasKey('competitor_watch', $result->contentJson);
+        $this->assertArrayHasKey('sentiment_trends', $result->contentJson);
+        $this->assertArrayHasKey('action_items', $result->contentJson);
+        $this->assertArrayHasKey('week_ahead', $result->contentJson);
         $this->assertSame('gpt-4o-mini', $result->model);
-        $this->assertSame(1170, $result->tokensUsed);
+        $this->assertSame(1270, $result->tokensUsed);
         $this->assertNotNull($result->rawResponse);
         $this->assertNotNull($result->prompt);
         $this->assertIsInt($result->costCents);
@@ -110,9 +117,12 @@ class DigestPipelineTest extends TestCase
         $result = $service->generate($business);
 
         $this->assertTrue($result->isFallback);
-        $this->assertStringContainsString('<h2>Performance Snapshot</h2>', $result->content);
-        $this->assertStringContainsString('<h2>Action Items</h2>', $result->content);
-        $this->assertStringContainsString('<h2>Competitor Watch</h2>', $result->content);
+        $this->assertStringContainsString('Performance Snapshot', $result->content);
+        $this->assertStringContainsString('Action Items', $result->content);
+        $this->assertStringContainsString('Competitor Watch', $result->content);
+        $this->assertIsArray($result->contentJson);
+        $this->assertArrayHasKey('performance_snapshot', $result->contentJson);
+        $this->assertArrayHasKey('action_items', $result->contentJson);
         $this->assertNull($result->model);
         $this->assertNull($result->tokensUsed);
     }
@@ -132,7 +142,8 @@ class DigestPipelineTest extends TestCase
         $result = $service->generate($business);
 
         $this->assertTrue($result->isFallback);
-        $this->assertStringContainsString('<h2>Performance Snapshot</h2>', $result->content);
+        $this->assertStringContainsString('Performance Snapshot', $result->content);
+        $this->assertIsArray($result->contentJson);
     }
 
     public function test_service_falls_back_when_api_key_missing(): void
@@ -173,16 +184,18 @@ class DigestPipelineTest extends TestCase
         $this->assertNotEmpty($result->content);
     }
 
-    public function test_service_sanitizes_script_tags_from_ai_response(): void
+    public function test_service_sanitizes_html_tags_from_ai_response(): void
     {
-        // Craft an AI response that embeds an XSS payload in the body HTML.
-        // PHP's strip_tags() removes the <script> opening and closing tags but
-        // keeps the inner text as plain text — so the tag itself is gone, which
-        // prevents the browser from executing it as JavaScript.
-        $maliciousBody = '<h2>Performance Snapshot</h2><p>Good week!</p><script>alert(\'xss\')</script>';
+        // Craft an AI response that embeds HTML/XSS payloads in section values.
+        // The service strips all HTML tags from section values since they must be plain text.
         $aiContent = json_encode([
             'subject_line' => 'Weekly Intel',
-            'body'         => $maliciousBody,
+            'performance_snapshot' => 'Good week! <script>alert("xss")</script> Rating is <b>4.8</b>',
+            'review_highlights' => 'Great reviews this week.',
+            'competitor_watch' => 'Competitors are steady.',
+            'sentiment_trends' => 'Positive trend.',
+            'action_items' => '• Respond to reviews.',
+            'week_ahead' => 'Keep it up!',
         ]);
 
         $fixture = $this->openaiFixture('chat-completion');
@@ -198,12 +211,12 @@ class DigestPipelineTest extends TestCase
         $result = $service->generate($business);
 
         $this->assertFalse($result->isFallback);
-        // The <script> tag itself must be stripped.
-        $this->assertStringNotContainsString('<script>', $result->content);
-        $this->assertStringNotContainsString('</script>', $result->content);
-        // Allowed structural HTML must survive.
-        $this->assertStringContainsString('<h2>Performance Snapshot</h2>', $result->content);
-        $this->assertStringContainsString('<p>Good week!</p>', $result->content);
+        // HTML tags must be stripped from section values.
+        $this->assertStringNotContainsString('<script>', $result->contentJson['performance_snapshot']);
+        $this->assertStringNotContainsString('<b>', $result->contentJson['performance_snapshot']);
+        // Plain text content must survive.
+        $this->assertStringContainsString('Good week!', $result->contentJson['performance_snapshot']);
+        $this->assertStringContainsString('Rating is 4.8', $result->contentJson['performance_snapshot']);
     }
 
     // ---------------------------------------------------------------------------
@@ -558,10 +571,9 @@ class DigestPipelineTest extends TestCase
         // The subject line appears as a heading in the rendered body.
         $this->assertStringContainsString($digest->subject_line, $rendered);
 
-        // The Markdown mail component inlines CSS on HTML tags, so we assert on the
-        // key text content rather than the exact html_content string.
+        // The digest has content_json, so the styled email partial is used.
         $this->assertStringContainsString('Performance Snapshot', $rendered);
-        $this->assertStringContainsString('Your business is doing great this week.', $rendered);
+        $this->assertStringContainsString('4.8-star rating', $rendered);
 
         // Both positive and negative signed feedback URLs must appear in the rendered email.
         $this->assertStringContainsString('/digest/' . $digest->id . '/feedback/positive', $rendered);

@@ -17,6 +17,7 @@ class Digest extends Model
         'week_start',
         'subject_line',
         'html_content',
+        'content_json',
         'plain_content',
         'llm_prompt',
         'llm_response',
@@ -34,6 +35,7 @@ class Digest extends Model
     {
         return [
             'week_start' => 'date',
+            'content_json' => 'array',
             'sent_at' => 'datetime',
             'opened_at' => 'datetime',
             'clicked_at' => 'datetime',
@@ -68,5 +70,10 @@ class Digest extends Model
     public function scopeFailed(Builder $query): Builder
     {
         return $query->where('status', 'failed');
+    }
+
+    public function sections(): ?array
+    {
+        return $this->content_json;
     }
 }
