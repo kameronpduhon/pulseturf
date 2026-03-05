@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 
 // Public
 Route::view('/', 'welcome');
+Route::view('/privacy', 'legal.privacy')->name('privacy');
+Route::view('/terms', 'legal.terms')->name('terms');
 
 // Signed feedback links (accessed from email, no auth required)
 Route::get('/digest/{digest}/feedback/{type}', DigestFeedbackController::class)
