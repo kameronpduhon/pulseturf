@@ -6,6 +6,10 @@
     <title>Terms of Service - PulseTurf</title>
     <meta name="description" content="PulseTurf terms of service. Read about the terms and conditions for using PulseTurf.">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />

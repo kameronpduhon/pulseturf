@@ -6,6 +6,10 @@
     <title>Privacy Policy - PulseTurf</title>
     <meta name="description" content="PulseTurf privacy policy. Learn how we collect, use, and protect your data.">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.png">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
