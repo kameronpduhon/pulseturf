@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -113,47 +113,7 @@
 </head>
 <body class="antialiased font-sans bg-white text-gray-900">
 
-    <!-- ════════════════════════════════════════════════
-         STICKY NAV
-    ════════════════════════════════════════════════ -->
-    <nav class="nav-blur fixed top-0 left-0 right-0 z-50 border-b border-gray-100/80">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-
-                <!-- Logo -->
-                <a href="/" class="flex items-center gap-2">
-                    <div class="w-7 h-7 rounded-md step-badge flex items-center justify-center flex-shrink-0">
-                        <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-indigo-600 tracking-tight">PulseTurf</span>
-                </a>
-
-                <!-- Nav actions -->
-                <div class="flex items-center gap-2 sm:gap-4">
-                    @auth
-                        <a href="{{ route('home') }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors">
-                            Dashboard
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}"
-                           class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition-colors px-3 py-2">
-                            Log in
-                        </a>
-                        <a href="{{ route('register') }}"
-                           class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition-colors shadow-sm">
-                            Start Free Trial
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-marketing-nav />
 
     <!-- ════════════════════════════════════════════════
          HERO
@@ -230,7 +190,7 @@
     <!-- ════════════════════════════════════════════════
          HOW IT WORKS
     ════════════════════════════════════════════════ -->
-    <section class="py-20 sm:py-28 bg-gray-50 border-t border-gray-100">
+    <section id="how-it-works" class="py-20 sm:py-28 bg-gray-50 border-t border-gray-100">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="text-center mb-14 scroll-reveal">
@@ -296,9 +256,197 @@
     </section>
 
     <!-- ════════════════════════════════════════════════
+         DIGEST PREVIEW
+    ════════════════════════════════════════════════ -->
+    <section class="py-20 sm:py-28 bg-white border-t border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="text-center mb-14 scroll-reveal">
+                <p class="text-indigo-600 text-sm font-semibold uppercase tracking-widest mb-3">Your Weekly Digest</p>
+                <h2 class="font-serif-display text-3xl sm:text-5xl text-gray-900 leading-tight mb-4">
+                    See what lands in your inbox
+                </h2>
+                <p class="text-gray-500 text-lg max-w-2xl mx-auto leading-relaxed">
+                    Every Monday at 7 AM, you receive a clear, AI-crafted briefing covering your performance, competitor moves, and what to do next.
+                </p>
+            </div>
+
+            <!-- Email mockup -->
+            <div class="max-w-2xl mx-auto scroll-reveal" style="transition-delay: 0.1s;">
+                <div class="rounded-2xl border border-gray-200 shadow-xl overflow-hidden">
+
+                    <!-- Email chrome header -->
+                    <div class="bg-gray-50 border-b border-gray-200 px-5 py-3.5">
+                        <div class="flex items-center gap-2 mb-2.5">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        </div>
+                        <p class="text-sm font-semibold text-gray-900 truncate">Your Med Spa Intel — Week of March 3, 2026</p>
+                        <p class="text-xs text-gray-400 mt-0.5">From: PulseTurf &lt;digest@pulseturf.com&gt;</p>
+                    </div>
+
+                    <!-- Email body -->
+                    <div class="bg-white px-5 sm:px-7 py-6 space-y-5">
+
+                        <!-- Performance Snapshot -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1 h-5 rounded-full bg-indigo-500"></div>
+                                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Performance Snapshot</h3>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                                <span class="font-semibold text-gray-900">4.8 <span class="text-amber-400">&#9733;</span></span>
+                                <span class="text-gray-500">127 reviews</span>
+                                <span class="inline-flex items-center gap-1 text-emerald-600 font-medium">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                                    +3 this week
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr class="border-gray-100">
+
+                        <!-- Review Highlights -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1 h-5 rounded-full bg-indigo-500"></div>
+                                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Review Highlights</h3>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg px-4 py-3 text-sm">
+                                <div class="flex items-center gap-1 mb-1">
+                                    <span class="text-amber-400">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                                    <span class="text-gray-400 text-xs ml-1">— Sarah M.</span>
+                                </div>
+                                <p class="text-gray-600 italic">"The staff was incredibly professional and my results exceeded all expectations. Best med spa experience I've ever had..."</p>
+                            </div>
+                        </div>
+
+                        <hr class="border-gray-100">
+
+                        <!-- Competitor Watch -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1 h-5 rounded-full bg-indigo-500"></div>
+                                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Competitor Watch</h3>
+                            </div>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 font-medium">Glow Med Spa</span>
+                                    <span class="text-gray-500">4.6 <span class="text-amber-400">&#9733;</span> &middot; 89 reviews <span class="text-emerald-600 font-medium">(+1)</span></span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-700 font-medium">Radiance Aesthetics</span>
+                                    <span class="text-gray-500">4.3 <span class="text-amber-400">&#9733;</span> &middot; 64 reviews <span class="text-emerald-600 font-medium">(+2)</span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="border-gray-100">
+
+                        <!-- Sentiment Trends -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1 h-5 rounded-full bg-indigo-500"></div>
+                                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Sentiment Trends</h3>
+                            </div>
+                            <div class="flex items-center gap-4 text-sm">
+                                <span class="inline-flex items-center gap-1.5 text-emerald-600 font-medium">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>4 positive
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 text-gray-500 font-medium">
+                                    <span class="w-2 h-2 rounded-full bg-gray-300"></span>1 neutral
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 text-red-500 font-medium">
+                                    <span class="w-2 h-2 rounded-full bg-red-400"></span>0 negative
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr class="border-gray-100">
+
+                        <!-- Action Items -->
+                        <div>
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-1 h-5 rounded-full bg-indigo-500"></div>
+                                <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Action Items</h3>
+                            </div>
+                            <ul class="space-y-1.5 text-sm text-gray-600">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    Respond to Sarah M.'s 5-star review to boost engagement
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-4 h-4 text-indigo-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    Monitor Radiance Aesthetics' recent uptick in reviews
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Fade out gradient -->
+                        <div class="relative h-10 -mb-6">
+                            <div class="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caption -->
+                <p class="text-center text-sm text-gray-400 mt-5">Sample briefing — your digest is personalized to your market</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
+         TRUST STRIP
+    ════════════════════════════════════════════════ -->
+    <section class="py-12 sm:py-16 bg-gray-50 border-t border-b border-gray-100">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <p class="text-center text-xs font-semibold uppercase tracking-widest text-gray-400 mb-8 scroll-reveal">Built for med spa professionals</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
+
+                <!-- Only Public Data -->
+                <div class="text-center scroll-reveal" style="transition-delay: 0.05s;">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-1.5">Only Public Data</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">We only analyze publicly available Google reviews and ratings. No private data, no scraping behind logins.</p>
+                </div>
+
+                <!-- Zero Maintenance -->
+                <div class="text-center scroll-reveal" style="transition-delay: 0.1s;">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-1.5">Zero Maintenance</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Once configured, briefings arrive automatically every Monday. No dashboards to check, no reports to run.</p>
+                </div>
+
+                <!-- Secure & Private -->
+                <div class="text-center scroll-reveal" style="transition-delay: 0.15s;">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-5 h-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-1.5">Secure & Private</h3>
+                    <p class="text-sm text-gray-500 leading-relaxed">Your data is processed securely. Payments handled by Stripe. We never store credit card details.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════
          PRICING
     ════════════════════════════════════════════════ -->
-    <section class="py-20 sm:py-28 bg-white" x-data="{ annual: false }">
+    <section id="pricing" class="py-20 sm:py-28 bg-white" x-data="{ annual: false }">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="text-center mb-12 scroll-reveal">
@@ -441,7 +589,7 @@
     <!-- ════════════════════════════════════════════════
          FAQ
     ════════════════════════════════════════════════ -->
-    <section class="py-20 sm:py-28 bg-gray-50 border-t border-gray-100"
+    <section id="faq" class="py-20 sm:py-28 bg-gray-50 border-t border-gray-100"
              x-data="{ open: null }">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -466,6 +614,8 @@
                         'Your 14-day free trial gives you full access to every feature — no credit card required to start. You can set up your business, add a competitor, and receive real weekly briefings. If you choose not to subscribe, your account simply expires at the end of the trial with no charges.'],
                     [5, 'How many competitors can I track?',
                         'The Starter plan lets you track 1 competitor, which is ideal for practices focused on their primary rival. The Pro plan expands that to 3 competitors — perfect if you operate in a competitive market with multiple nearby med spas to keep an eye on.'],
+                    [6, 'Is my data secure?',
+                        'PulseTurf only monitors publicly visible Google Business data — the same information anyone can see on Google Maps. We never access private business data. Payments are processed securely by Stripe, and we never store credit card details. See our Privacy Policy for full details.'],
                 ];
                 @endphp
 
@@ -530,36 +680,7 @@
         </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════
-         FOOTER
-    ════════════════════════════════════════════════ -->
-    <footer class="bg-white border-t border-gray-100 py-10">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-
-                <!-- Brand -->
-                <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded step-badge flex items-center justify-center">
-                        <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                    </div>
-                    <span class="text-indigo-600 font-bold">PulseTurf</span>
-                    <span class="text-gray-300 select-none">|</span>
-                    <span class="text-gray-400 text-sm">&copy; {{ date('Y') }} All rights reserved.</span>
-                </div>
-
-                <!-- Links -->
-                <div class="flex items-center gap-6 text-sm text-gray-400">
-                    <a href="{{ route('login') }}" class="hover:text-indigo-600 transition-colors font-medium">Log in</a>
-                    @guest
-                        <a href="{{ route('register') }}" class="hover:text-indigo-600 transition-colors font-medium">Sign up</a>
-                    @endguest
-                </div>
-
-            </div>
-        </div>
-    </footer>
+    <x-marketing-footer />
 
     <!-- Scroll reveal -->
     <script>
