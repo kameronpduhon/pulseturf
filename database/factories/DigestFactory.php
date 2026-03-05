@@ -57,11 +57,26 @@ class DigestFactory extends Factory
             'status'          => 'generated',
             'subject_line'    => 'Your Weekly Med Spa Intel: Rating Update',
             'html_content'    => '<h2>Performance Snapshot</h2><p>Your business is doing great this week.</p>',
+            'content_json'    => [
+                'performance_snapshot' => 'Your business maintained a strong 4.8-star rating this week.',
+                'review_highlights' => 'Top Review (5/5): "Amazing experience!" — Sarah M.',
+                'competitor_watch' => 'Glow Med Spa: 4.2 stars (89 total reviews).',
+                'sentiment_trends' => '2 positive reviews, 0 critical reviews this week.',
+                'action_items' => "• Respond to Sarah M.'s review.\n• Ask satisfied clients for reviews.",
+                'week_ahead' => 'Focus on converting satisfied clients into reviewers this week.',
+            ],
             'llm_model'       => 'gpt-4o-mini',
             'llm_prompt'      => 'Test prompt',
-            'llm_response'    => '{"subject_line": "test", "body": "test"}',
+            'llm_response'    => '{"subject_line": "test"}',
             'llm_tokens_used' => 1000,
             'llm_cost_cents'  => 5,
+        ]);
+    }
+
+    public function withoutContentJson(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'content_json' => null,
         ]);
     }
 

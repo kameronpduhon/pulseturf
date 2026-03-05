@@ -8,14 +8,14 @@
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "{\"subject_line\": \"Your Weekly Med Spa Intel: 4.8\u2605 Rating Holds Strong\", \"body\": \"<h2>Performance Snapshot</h2><p>Your business maintained a strong 4.8-star rating this week with 3 new reviews.</p><h2>Review Highlights</h2><p><strong>Standout Review:</strong> \\\"Amazing experience! The staff was incredibly professional.\\\" \u2014 Sarah M.</p><h2>Competitor Watch</h2><p>Competitor <strong>Glow Med Spa</strong> received 2 new reviews averaging 4.0 stars.</p><h2>Sentiment Trends</h2><p>Positive sentiment is up 5% compared to last week. No negative reviews received.</p><h2>Action Items</h2><ul><li>Consider responding to Sarah M.'s review to boost engagement</li><li>Monitor Glow Med Spa's pricing changes mentioned in their reviews</li></ul><h2>Week Ahead</h2><p>Focus on encouraging satisfied clients to leave reviews to maintain your competitive edge.</p>\"}"
+        "content": "{\"subject_line\": \"Your Weekly Med Spa Intel: 4.8\u2605 Rating Holds Strong\", \"performance_snapshot\": \"Your business maintained a strong 4.8-star rating this week with 3 new reviews. Total review count is now 127. No significant change from last week.\", \"review_highlights\": \"Top Review (5/5): \\\"Amazing experience! The staff was incredibly professional and the results were beyond my expectations.\\\" \\u2014 Sarah M.\\n\\nMost Critical (3/5): \\\"Good service but the wait time was longer than expected.\\\" \\u2014 James R.\", \"competitor_watch\": \"Glow Med Spa: 4.2 stars (89 total reviews) \\u2014 received 2 new reviews this week averaging 4.0 stars.\\nRadiance Clinic: 4.5 stars (64 total reviews) \\u2014 no new reviews this week.\", \"sentiment_trends\": \"Positive sentiment is strong this week. Of 3 new reviews, 2 were positive (4+ stars) and 0 were critical (2 stars or fewer). One neutral review at 3 stars.\", \"action_items\": \"\\u2022 Respond to Sarah M.'s glowing review to boost engagement and show appreciation.\\n\\u2022 Address James R.'s wait time concern \\u2014 consider sending a direct follow-up.\\n\\u2022 Monitor Glow Med Spa's pricing changes mentioned in their recent reviews.\\n\\u2022 Ask 2-3 satisfied clients this week to leave a Google review.\", \"week_ahead\": \"You're in a strong position this week. Focus on converting satisfied clients into reviewers and keep an eye on Glow Med Spa's momentum. Every 5-star review widens your competitive lead.\"}"
       },
       "finish_reason": "stop"
     }
   ],
   "usage": {
     "prompt_tokens": 850,
-    "completion_tokens": 320,
-    "total_tokens": 1170
+    "completion_tokens": 420,
+    "total_tokens": 1270
   }
 }

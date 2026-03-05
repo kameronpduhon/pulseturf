@@ -59,8 +59,14 @@
                             x-transition:leave-end="opacity-0 -translate-y-1"
                             class="border-t border-gray-100"
                         >
-                            <div class="p-5 prose prose-sm max-w-none text-gray-700">
-                                {!! $digest->html_content !!}
+                            <div class="p-5">
+                                @if ($digest->content_json)
+                                    @include('partials.digest-web', ['sections' => $digest->content_json])
+                                @else
+                                    <div class="prose prose-sm max-w-none text-gray-700">
+                                        {!! $digest->html_content !!}
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
