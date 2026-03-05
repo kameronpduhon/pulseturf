@@ -4,11 +4,7 @@
 
             <!-- Logo -->
             <a href="/" class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-md step-badge flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                </div>
+                <img src="/favicon.png" alt="PulseTurf" class="w-7 h-7 rounded-md flex-shrink-0">
                 <span class="text-xl font-bold text-indigo-600 tracking-tight">PulseTurf</span>
             </a>
 

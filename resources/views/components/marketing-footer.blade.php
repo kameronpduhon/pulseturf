@@ -5,11 +5,7 @@
             <!-- Brand -->
             <div class="lg:col-span-2">
                 <a href="/" class="flex items-center gap-2 mb-3">
-                    <div class="w-6 h-6 rounded step-badge flex items-center justify-center">
-                        <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
-                    </div>
+                    <img src="/favicon.png" alt="PulseTurf" class="w-6 h-6 rounded">
                     <span class="text-indigo-600 font-bold text-lg">PulseTurf</span>
                 </a>
                 <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
