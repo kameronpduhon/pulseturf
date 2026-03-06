@@ -279,6 +279,12 @@
                                 </div>
                             </div>
 
+                            @if ($competitorSearchError)
+                                <div class="rounded-md bg-red-50 border border-red-200 p-3 mb-3 text-sm text-red-700">
+                                    {{ $competitorSearchError }}
+                                </div>
+                            @endif
+
                             <div class="flex gap-3">
                                 <button
                                     wire:click="confirmCompetitor"
