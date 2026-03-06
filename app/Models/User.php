@@ -81,8 +81,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $subscription = $this->subscription('default');
 
-        if (! $subscription) {
-            return 1;
+        // During active trial, give full Pro access (3 competitors)
+        if (! $subscription || $subscription->onTrial()) {
+            return 3;
         }
 
         $proMonthly = config('services.stripe.prices.pro_monthly');
