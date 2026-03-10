@@ -114,7 +114,15 @@
             transform: translateY(0);
         }
     </style>
-</head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN226K8XWR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+        gtag("config", "G-JN226K8XWR");
+    </script>
+    </head>
 <body class="antialiased font-sans bg-white text-gray-900">
 
     <x-marketing-nav />

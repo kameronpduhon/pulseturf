@@ -6,7 +6,15 @@
     <title>Sample Monday Digest | PulseTurf</title>
     <meta name="description" content="Sample PulseTurf Monday Digest preview.">
     @vite(['resources/css/app.css'])
-</head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN226K8XWR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+        gtag("config", "G-JN226K8XWR");
+    </script>
+    </head>
 <body class="min-h-screen bg-gradient-to-b from-indigo-50 via-violet-50 to-white font-sans text-gray-900 antialiased">
     <main class="mx-auto flex w-full max-w-4xl flex-col gap-8 px-4 py-10 sm:px-6 sm:py-14">
         <header class="space-y-2 text-center">

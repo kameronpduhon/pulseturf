@@ -22,6 +22,14 @@
                     radial-gradient(at 80% 90%, rgba(79, 70, 229, 0.05) 0px, transparent 50%);
             }
         </style>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN226K8XWR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag("js", new Date());
+        gtag("config", "G-JN226K8XWR");
+    </script>
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="guest-bg min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
