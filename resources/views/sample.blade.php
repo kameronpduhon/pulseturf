@@ -30,9 +30,14 @@
                         {{ $businessName }} &middot; tracking {{ $competitor }} &middot; Week of {{ $weekOf }}
                     </p>
                 </div>
-                <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-indigo-700">
-                    SAMPLE REPORT
-                </span>
+                <div class="flex flex-col items-end gap-2">
+                    <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-indigo-700">
+                        SAMPLE REPORT
+                    </span>
+                    <a href="/register" class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-indigo-500 sm:text-sm">
+                        Start Free Trial &rarr;
+                    </a>
+                </div>
             </div>
 
             @include("partials.digest-web", ["sections" => $sections])
@@ -42,7 +47,7 @@
             <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">Get this in your inbox every Monday.</h2>
             <p class="mt-3 text-sm text-indigo-100 sm:text-base">Free 14-day trial. No credit card required.</p>
             <a
-                href="/"
+                href="/register"
                 class="mt-6 inline-flex items-center justify-center rounded-xl bg-indigo-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-white/80 focus:ring-offset-2 focus:ring-offset-indigo-900 sm:text-base"
             >
                 Start Free Trial &rarr;
