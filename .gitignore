@@ -3,6 +3,12 @@
 .env
 .env.backup
 .env.production
+.env.keys
+prospects*.csv
+all-prospects-sent.csv
+followup_log.json
+send_log.json
+sent_emails.txt
 .phpactor.json
 .phpunit.result.cache
 /.fleet
